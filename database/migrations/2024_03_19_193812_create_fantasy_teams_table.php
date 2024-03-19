@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('fantasy_teams', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('balance', 10, 2)->default(0);
+            $table->decimal('balance', 10, 2)->default(100);
             $table->foreignIdFor(\App\Models\User::class)->cascadeOnDelete();
             $table->timestamps();
         });
