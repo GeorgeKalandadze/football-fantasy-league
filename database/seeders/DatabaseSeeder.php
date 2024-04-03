@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Division;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,7 +16,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             PositionSeeder::class,
             DivisionSeeder::class,
-            ScoringRuleSeeder::class
+            ScoringRuleSeeder::class,
         ]);
     }
 }
