@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             PositionSeeder::class,
             DivisionSeeder::class,
             ScoringRuleSeeder::class,
+            RolesSeeder::class,
         ]);
     }
 }
