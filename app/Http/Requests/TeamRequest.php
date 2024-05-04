@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlayerRequest extends FormRequest
+class TeamRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,16 +19,12 @@ class PlayerRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'age' => 'required|integer|min:18|max:99',
-            'market_price' => 'required|numeric|min:0',
+            'name' => 'required|string|max:255',
             'country_id' => 'required|exists:countries,id',
-            'position_id' => 'required|exists:positions,id',
-            'team_id' => 'required|exists:teams,id',
+            'division_id' => 'required|exists:divisions,id',
         ];
     }
 }
