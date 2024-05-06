@@ -19,7 +19,7 @@ class Player extends Model
         'market_price',
         'country_id',
         'position_id',
-        'team_id'
+        'team_id',
     ];
 
     public function country(): BelongsTo

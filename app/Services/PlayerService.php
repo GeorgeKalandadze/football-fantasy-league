@@ -1,12 +1,12 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Player;
-use \App\Repositories\Contracts\PlayerRepositoryContract;
+use App\Repositories\Contracts\PlayerRepositoryContract;
 
 class PlayerService
 {
-
     public function __construct(protected PlayerRepositoryContract $playerRepository)
     {
 
@@ -36,5 +36,4 @@ class PlayerService
     {
         return $this->playerRepository->getById($id);
     }
-
 }

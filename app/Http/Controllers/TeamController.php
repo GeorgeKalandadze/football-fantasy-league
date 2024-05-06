@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Team;
 use App\Http\Requests\TeamRequest;
-use Illuminate\Http\JsonResponse;
+use App\Models\Team;
 use App\Services\TeamService;
+use Illuminate\Http\JsonResponse;
 
 class TeamController extends Controller
 {
@@ -17,6 +17,7 @@ class TeamController extends Controller
     public function index(): JsonResponse
     {
         $teams = $this->teamService->getAllTeams();
+
         return response()->json(['teams' => $teams], 200);
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Models\Player;
@@ -20,6 +21,7 @@ class PlayerRepository implements PlayerRepositoryContract
     {
         $player = Player::findOrFail($id);
         $player->update($data);
+
         return $player;
     }
 

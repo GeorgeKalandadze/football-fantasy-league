@@ -1,17 +1,14 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
-use App\Models\Player;
 use App\Http\Requests\PlayerRequest;
-use Illuminate\Http\JsonResponse;
+use App\Models\Player;
 use App\Services\PlayerService;
+use Illuminate\Http\JsonResponse;
 
 class PlayerController extends Controller
 {
-
-
     public function __construct(protected PlayerService $playerService)
     {
 
@@ -20,6 +17,7 @@ class PlayerController extends Controller
     public function index(): JsonResponse
     {
         $players = $this->playerService->getAllPlayers();
+
         return response()->json(['players' => $players], 200);
     }
 
@@ -58,4 +56,3 @@ class PlayerController extends Controller
         return response()->json(['message' => 'Player deleted successfully'], 200);
     }
 }
-

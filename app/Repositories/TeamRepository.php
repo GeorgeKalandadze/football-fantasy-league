@@ -6,7 +6,6 @@ use App\Models\Team;
 
 class TeamRepository implements Contracts\TeamRepositoryContract
 {
-
     public function getAll(): array
     {
         return Team::all()->toArray();
@@ -21,6 +20,7 @@ class TeamRepository implements Contracts\TeamRepositoryContract
     {
         $player = Team::findOrFail($id);
         $player->update($data);
+
         return $player;
     }
 

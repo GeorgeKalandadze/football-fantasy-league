@@ -25,5 +25,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('teams', TeamController::class);
 });
 
-
 require __DIR__.'/auth.php';
