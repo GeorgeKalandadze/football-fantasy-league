@@ -34,18 +34,29 @@ class PlayerService
         return $this->playerRepository->create($data);
     }
 
-    public function update(int $id, array $data): Player
+    public function update(int $id, array $data): ?Player
     {
-        $teamId = $data['team_id'] ?? null;
-        if ($teamId) {
-            $playersCountInTeam = $this->countPlayersInTeam($teamId);
-            if ($playersCountInTeam >= 23) {
-                return 'Team is fully occupied. Please consider adding this player to another team or create the player without a team.';
-            }
+        $player = $this->playerRepository->getById($id);
+        if (!$player) {
+            return null;
         }
 
-        return $this->playerRepository->update($id, $data);
+        if (isset($data['team_id'])) {
+            $teamId = $data['team_id'];
+            if ($teamId && $this->countPlayersInTeam($teamId) >= 23) {
+                return null;
+            }
+            $player->team_id = $teamId;
+        } else {
+            $player->team_id = null;
+        }
+        
+        $player->fill($data);
+
+        return $this->playerRepository->update($id, $player->toArray());
     }
+
+
 
     public function delete(int $id): bool
     {
