@@ -6,12 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Player extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['firstname', 'lastname', 'age', 'market_price', 'country_id', 'position_id'];
+    protected $fillable = [
+        'firstname',
+        'lastname',
+        'age',
+        'market_price',
+        'country_id',
+        'position_id',
+        'team_id',
+    ];
 
     public function country(): BelongsTo
     {
@@ -31,5 +40,10 @@ class Player extends Model
     public function scoringRules(): BelongsToMany
     {
         return $this->belongsToMany(ScoringRule::class, 'player_statistics')->withPivot('game_id');
+    }
+
+    public function team(): HasOne
+    {
+        return $this->hasOne(Team::class);
     }
 }
