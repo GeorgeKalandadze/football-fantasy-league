@@ -28,7 +28,7 @@ class PlayerRequest extends FormRequest
             'market_price' => 'required|numeric|min:0',
             'country_id' => 'required|exists:countries,id',
             'position_id' => 'required|exists:positions,id',
-            'team_id' => 'required|exists:teams,id',
+            'team_id' => 'nullable|exists:teams,id',
         ];
     }
 }

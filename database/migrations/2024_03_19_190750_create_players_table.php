@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('market_price', 10, 2);
             $table->foreignIdFor(\App\Models\Country::class)->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Position::class)->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Team::class)->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Team::class)->nullable();
             $table->timestamps();
         });
     }

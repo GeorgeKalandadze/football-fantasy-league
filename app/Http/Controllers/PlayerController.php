@@ -21,13 +21,17 @@ class PlayerController extends Controller
         return response()->json(['players' => $players], 200);
     }
 
-    public function store(PlayerRequest $request): JsonResponse
+     public function store(PlayerRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
         $player = $this->playerService->create($validatedData);
 
-        return response()->json(['message' => 'Player created successfully', 'player' => $player], 201);
+        if ($player instanceof Player) {
+            return response()->json(['message' => 'Player created successfully', 'player' => $player], 201);
+        } else {
+            return response()->json(['message' => $player], 400);
+        }
     }
 
     public function show(Player $player): JsonResponse
