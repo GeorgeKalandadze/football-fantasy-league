@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             DivisionSeeder::class,
             ScoringRuleSeeder::class,
             RolesSeeder::class,
-            TeamSeeder::class
+            TeamSeeder::class,
         ]);
     }
 }
