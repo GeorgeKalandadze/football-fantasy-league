@@ -11,8 +11,7 @@ class PlayerService
     public function __construct(
         protected PlayerRepositoryContract $playerRepository,
         protected TeamRepositoryContract $teamRepository
-    )
-    {
+    ) {
 
     }
 
@@ -37,7 +36,7 @@ class PlayerService
     public function update(int $id, array $data): ?Player
     {
         $player = $this->playerRepository->getById($id);
-        if (!$player) {
+        if (! $player) {
             return null;
         }
 
@@ -50,13 +49,11 @@ class PlayerService
         } else {
             $player->team_id = null;
         }
-        
+
         $player->fill($data);
 
         return $this->playerRepository->update($id, $player->toArray());
     }
-
-
 
     public function delete(int $id): bool
     {
@@ -71,7 +68,7 @@ class PlayerService
     protected function countPlayersInTeam(int $teamId): int
     {
         $team = $this->teamRepository->getById($teamId);
+
         return $team->players()->count();
     }
 }
-

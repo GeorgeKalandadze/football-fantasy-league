@@ -21,7 +21,7 @@ class PlayerController extends Controller
         return response()->json(['players' => $players], 200);
     }
 
-     public function store(PlayerRequest $request): JsonResponse
+    public function store(PlayerRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 

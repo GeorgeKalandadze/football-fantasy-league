@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('players', PlayerController::class);
     Route::apiResource('teams', TeamController::class);
+    Route::apiResource('divisions', DivisionController::class);
 });
 
 require __DIR__.'/auth.php';

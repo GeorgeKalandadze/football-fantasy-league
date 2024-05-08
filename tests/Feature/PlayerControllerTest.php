@@ -1,6 +1,5 @@
 <?php
 
-namespace Tests\Feature;
 
 use App\Models\Player;
 use App\Models\Team;

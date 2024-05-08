@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\Team;
 use App\Models\Player;
+use App\Models\Team;
+use Illuminate\Database\Seeder;
 
 class TeamSeeder extends Seeder
 {
