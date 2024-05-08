@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('fantasy_team_players', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Player::class)->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\FantasyTeam::class)->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Player::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\FantasyTeam::class)->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

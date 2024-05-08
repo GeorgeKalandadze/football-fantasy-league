@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlayerRequest extends FormRequest
+class FantasyTeamRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,9 @@ class PlayerRequest extends FormRequest
     public function rules()
     {
         return [
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'age' => 'required|integer|min:18|max:99',
-            'market_price' => 'required|numeric|min:5|max:20',
-            'country_id' => 'required|exists:countries,id',
-            'position_id' => 'required|exists:positions,id',
-            'team_id' => 'nullable|exists:teams,id',
+            'name' => 'required|string|max:255',
+            'players' => 'required|array|min:8',
+            'players.*' => 'exists:players,id',
         ];
     }
 }
