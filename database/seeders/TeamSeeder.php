@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Division;
 use App\Models\Player;
 use App\Models\Team;
 use Illuminate\Database\Seeder;
@@ -13,10 +14,15 @@ class TeamSeeder extends Seeder
      */
     public function run()
     {
-        $team = Team::factory()->create();
+        $divisions = Division::all();
 
-        Player::factory()->count(23)->create([
-            'team_id' => $team->id,
-        ]);
+        foreach ($divisions as $division) {
+            for ($i = 0; $i < 10; $i++) {
+                $team = Team::factory()->create(['division_id' => $division->id]);
+                Player::factory()->count(23)->create([
+                    'team_id' => $team->id,
+                ]);
+            }
+        }
     }
 }

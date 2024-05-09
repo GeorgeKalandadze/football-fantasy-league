@@ -16,6 +16,7 @@ class Fixture extends Model
         'away_team_id',
         'date',
         'week',
+        'division_id',
     ];
 
     public function homeTeam(): BelongsTo
