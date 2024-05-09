@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\User;
