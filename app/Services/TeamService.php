@@ -11,8 +11,7 @@ class TeamService
     public function __construct(
         protected TeamRepositoryContract $teamRepository,
         protected DivisionRepositoryContract $divisionRepository
-    )
-    {
+    ) {
 
     }
 
@@ -37,7 +36,7 @@ class TeamService
     public function update(int $id, array $data): Team|string|null
     {
         $team = $this->teamRepository->getById($id);
-        if (!$team) {
+        if (! $team) {
             return null;
         }
 
@@ -52,7 +51,6 @@ class TeamService
         return $this->teamRepository->update($id, $data);
     }
 
-
     public function delete(int $id): bool
     {
         return $this->teamRepository->delete($id);
@@ -66,6 +64,7 @@ class TeamService
     protected function countTeamsInDivision(int $divisionId): int
     {
         $division = $this->divisionRepository->getById($divisionId);
+
         return $division->teams()->count();
     }
 }

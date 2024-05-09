@@ -25,7 +25,7 @@ class PlayerFactory extends Factory
             'firstname' => $this->faker->firstName,
             'lastname' => $this->faker->lastName,
             'age' => $this->faker->numberBetween(18, 40),
-            'market_price' => $this->faker->randomFloat(2, 1000, 100000),
+            'market_price' => $this->faker->numberBetween(5, 20),
             'country_id' => $this->faker->randomElement($countries),
             'position_id' => $this->faker->randomElement($positions),
             'team_id' => \App\Models\Team::factory(),
