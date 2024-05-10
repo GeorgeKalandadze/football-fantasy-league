@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Events\PlayerStatisticsRecorded;
 use App\Models\Fixture;
 use App\Models\Game;
-use App\Models\PlayerStatistic;
-use App\Models\ScoringRule;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -35,27 +34,14 @@ class GenerateWeeklyGames extends Command
             ]);
 
             foreach ($homeTeam->players as $player) {
-                $this->recordPlayerStatistics($player, $game, $homeTeamGoals);
+                event(new PlayerStatisticsRecorded($player, $game, $homeTeamGoals));
             }
 
             foreach ($awayTeam->players as $player) {
-                $this->recordPlayerStatistics($player, $game, $awayTeamGoals);
+                event(new PlayerStatisticsRecorded($player, $game, $awayTeamGoals));
             }
         }
 
         $this->info('Games for the upcoming week have been generated successfully.');
-    }
-
-    protected function recordPlayerStatistics($player, $game, $goals)
-    {
-        for ($i = 0; $i < $goals; $i++) {
-            $scoringRule = ScoringRule::inRandomOrder()->first();
-
-            PlayerStatistic::create([
-                'player_id' => $player->id,
-                'game_id' => $game->id,
-                'scoring_rule_id' => $scoringRule->id,
-            ]);
-        }
     }
 }
