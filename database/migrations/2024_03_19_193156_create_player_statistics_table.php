@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('player_statistics', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Player::class)->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\ScoringRule::class);
-            $table->foreignIdFor(\App\Models\Game::class)->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Player::class)->cascadeOnDelete()->constrained();
+            $table->foreignIdFor(\App\Models\ScoringRule::class)->constrained();
+            $table->foreignIdFor(\App\Models\Game::class)->cascadeOnDelete()->constrained();
             $table->timestamps();
         });
     }

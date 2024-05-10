@@ -22,7 +22,6 @@ class FixtureSeeder extends Seeder
             $teams = $division->teams->pluck('id');
             $teamCount = count($teams);
 
-
             for ($week = 1; $week <= $teamCount - 1; $week++) {
                 $currentWeekTeams = $teams->slice($week - 1)->merge($teams->take($week - 1)->reverse());
 
