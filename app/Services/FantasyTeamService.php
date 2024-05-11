@@ -6,6 +6,7 @@ use App\Models\FantasyTeam;
 use App\Repositories\Contracts\FantasyTeamRepositoryContract;
 use App\Repositories\Contracts\PlayerRepositoryContract;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class FantasyTeamService
@@ -107,8 +108,17 @@ class FantasyTeamService
         }
     }
 
-    public function deleteFantasyTeam(int $id): bool
+    public function deleteFantasyTeam(int $id): string
     {
-        return $this->fantasyTeamRepository->delete($id);
+        if (! Auth::user()->hasPermissionTo('delete_fantasy_team')) {
+            return 'You do not have permission to delete a fantasy team.';
+        }
+
+        $deleted = $this->fantasyTeamRepository->delete($id);
+        if (! $deleted) {
+            return 'Failed to delete fantasy team.';
+        }
+
+        return 'Fantasy team deleted successfully.';
     }
 }

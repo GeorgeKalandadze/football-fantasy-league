@@ -25,9 +25,9 @@ class TeamController extends Controller
     {
         $validatedData = $request->validated();
 
-        $team = $this->teamService->create($validatedData);
+        $message = $this->teamService->create($validatedData);
 
-        return response()->json(['message' => 'Team created successfully', 'team' => $team], 201);
+        return response()->json(['message' => $message], 201);
     }
 
     public function show(Team $team): JsonResponse
@@ -44,15 +44,15 @@ class TeamController extends Controller
     {
         $validatedData = $request->validated();
 
-        $this->teamService->update($team->id, $validatedData);
+        $response = $this->teamService->update($team->id, $validatedData);
 
-        return response()->json(['message' => 'Team updated successfully'], 200);
+        return response()->json(['response' => $response], 200);
     }
 
     public function destroy(Team $team): JsonResponse
     {
-        $this->teamService->delete($team->id);
+        $response = $this->teamService->delete($team->id);
 
-        return response()->json(['message' => 'Team deleted successfully'], 200);
+        return response()->json(['response' => $response], 200);
     }
 }

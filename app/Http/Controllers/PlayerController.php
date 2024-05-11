@@ -25,13 +25,9 @@ class PlayerController extends Controller
     {
         $validatedData = $request->validated();
 
-        $player = $this->playerService->create($validatedData);
+        $response = $this->playerService->create($validatedData);
 
-        if ($player instanceof Player) {
-            return response()->json(['message' => 'Player created successfully', 'player' => $player], 201);
-        } else {
-            return response()->json(['message' => $player], 400);
-        }
+        return response()->json(['message' => $response], 201);
     }
 
     public function show(Player $player): JsonResponse
@@ -48,15 +44,15 @@ class PlayerController extends Controller
     {
         $validatedData = $request->validated();
 
-        $this->playerService->update($player->id, $validatedData);
+        $response = $this->playerService->update($player->id, $validatedData);
 
-        return response()->json(['message' => 'Player updated successfully'], 200);
+        return response()->json(['response' => $response], 200);
     }
 
     public function destroy(Player $player): JsonResponse
     {
-        $this->playerService->delete($player->id);
+        $response = $this->playerService->delete($player->id);
 
-        return response()->json(['message' => 'Player deleted successfully'], 200);
+        return response()->json(['message' => $response], 200);
     }
 }

@@ -25,9 +25,9 @@ class DivisionController extends Controller
     {
         $validatedData = $request->validated();
 
-        $division = $this->divisionService->create($validatedData);
+        $response = $this->divisionService->create($validatedData);
 
-        return response()->json(['message' => 'Division created successfully', 'division' => $division], 201);
+        return response()->json(['response' => $response], 201);
     }
 
     public function show(Division $division): JsonResponse
@@ -44,15 +44,15 @@ class DivisionController extends Controller
     {
         $validatedData = $request->validated();
 
-        $this->divisionService->update($division->id, $validatedData);
+        $response = $this->divisionService->update($division->id, $validatedData);
 
-        return response()->json(['message' => 'Division updated successfully'], 200);
+        return response()->json(['response' => $response], 200);
     }
 
     public function destroy(Division $division): JsonResponse
     {
-        $this->divisionService->delete($division->id);
+        $response = $this->divisionService->delete($division->id);
 
-        return response()->json(['message' => 'Division deleted successfully'], 200);
+        return response()->json(['response' => $response], 200);
     }
 }

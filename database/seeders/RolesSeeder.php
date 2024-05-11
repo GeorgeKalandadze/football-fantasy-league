@@ -8,27 +8,43 @@ use Spatie\Permission\Models\Permission;
 
 class RolesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $guardName = config('auth.defaults.guard');
 
-        $createTeamPermission = Permission::create(['name' => 'create_team']);
-        $editTeamPermission = Permission::create(['name' => 'edit_team']);
-        $deleteTeamPermission = Permission::create(['name' => 'delete_team']);
+        $permissions = [
+            'create_team', 'edit_team', 'delete_team', 'delete_fantasy_team',
+            'create_player', 'edit_player', 'delete_player',
+            'create_division', 'edit_division', 'delete_division',
+        ];
 
-        DB::table('roles')->insert([
-            ['name' => 'admin', 'guard_name' => $guardName],
-            ['name' => 'team_owner', 'guard_name' => $guardName],
-        ]);
+        $roles = [
+            'admin' => [
+                'create_team',
+                'edit_team',
+                'delete_team',
+                'delete_fantasy_team',
+                'create_player',
+                'edit_player',
+                'delete_player',
+                'create_division',
+                'edit_division',
+                'delete_division',
+            ],
+            'moderator' => ['edit_team', 'edit_player', 'edit_division'],
+        ];
 
-        DB::table('role_has_permissions')->insert([
-            ['role_id' => 1, 'permission_id' => $createTeamPermission->id],
-            ['role_id' => 2, 'permission_id' => $editTeamPermission->id],
-            ['role_id' => 1, 'permission_id' => $deleteTeamPermission->id],
-        ]);
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission]);
+        }
 
+        foreach ($roles as $roleName => $permissionNames) {
+            $roleId = DB::table('roles')->insertGetId(['name' => $roleName, 'guard_name' => $guardName]);
+
+            foreach ($permissionNames as $permissionName) {
+                $permissionId = Permission::where('name', $permissionName)->first()->id;
+                DB::table('role_has_permissions')->insert(['role_id' => $roleId, 'permission_id' => $permissionId]);
+            }
+        }
     }
 }
