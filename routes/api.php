@@ -26,7 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('players', PlayerController::class);
     Route::apiResource('teams', TeamController::class);
     Route::apiResource('divisions', DivisionController::class);
-    Route::apiResource('/fantasy-team', FantasyTeamController::class);
+    Route::apiResource('/fantasy-teams', FantasyTeamController::class);
 });
 
 require __DIR__.'/auth.php';
