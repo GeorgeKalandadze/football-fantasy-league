@@ -46,13 +46,13 @@ class DivisionController extends Controller
 
         $response = $this->divisionService->update($division->id, $validatedData);
 
-        return response()->json(['response' => $response], 201);
+        return response()->json(['response' => $response], 200);
     }
 
     public function destroy(Division $division): JsonResponse
     {
         $response = $this->divisionService->delete($division->id);
 
-        return response()->json(['response' => $response], 201);
+        return response()->json(['response' => $response], 200);
     }
 }
