@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Division;
 use App\Repositories\Contracts\DivisionRepositoryContract;
+use Illuminate\Support\Facades\Auth;
 
 class DivisionService
 {
@@ -17,19 +18,43 @@ class DivisionService
         return $this->divisionRepository->getAll();
     }
 
-    public function create(array $data): Division
+    public function create(array $data): string
     {
-        return $this->divisionRepository->create($data);
+        if (!Auth::user()->hasPermissionTo('create_division')) {
+            return 'You do not have permission to create a division.';
+        }
+
+        $this->divisionRepository->create($data);
+        return 'Division created successfully.';
     }
 
-    public function update(int $id, array $data): Division
+    public function update(int $id, array $data): string
     {
-        return $this->divisionRepository->update($id, $data);
+        if (!Auth::user()->hasPermissionTo('edit_division')) {
+            return 'You do not have permission to edit a division.';
+        }
+
+        $division = $this->divisionRepository->getById($id);
+        if (! $division) {
+            return 'Division not found.';
+        }
+
+        $this->divisionRepository->update($id, $data);
+        return 'Division updated successfully.';
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id): string
     {
-        return $this->divisionRepository->delete($id);
+        if (!Auth::user()->hasPermissionTo('delete_division')) {
+            return 'You do not have permission to delete a division.';
+        }
+
+        $deleted = $this->divisionRepository->delete($id);
+        if (!$deleted) {
+            return 'Failed to delete division.';
+        }
+
+        return 'Division deleted successfully.';
     }
 
     public function getById(int $id): ?Division
