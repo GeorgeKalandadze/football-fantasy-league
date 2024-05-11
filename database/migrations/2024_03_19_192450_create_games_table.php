@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Fixture::class)->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Fixture::class)->cascadeOnDelete()->constrained();
             $table->unsignedInteger('home_team_goals')->default(0);
             $table->unsignedInteger('away_team_goals')->default(0);
             $table->timestamps();

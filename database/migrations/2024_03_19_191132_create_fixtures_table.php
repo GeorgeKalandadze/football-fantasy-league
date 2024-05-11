@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('home_team_id')->constrained('teams')->onDelete('cascade');
             $table->foreignId('away_team_id')->constrained('teams')->onDelete('cascade');
             $table->dateTime('date');
+            $table->foreignIdFor(\App\Models\Division::class)->constrained();
             $table->unsignedSmallInteger('week');
             $table->timestamps();
         });
