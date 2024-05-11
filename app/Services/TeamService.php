@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Team;
 use App\Repositories\Contracts\DivisionRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
+use Illuminate\Support\Facades\Auth;
 
 class TeamService
 {
@@ -20,8 +21,12 @@ class TeamService
         return $this->teamRepository->getAll();
     }
 
-    public function create(array $data): Team|string
+    public function create(array $data): string
     {
+        if (!Auth::user()->hasPermissionTo('create_team')) {
+            return 'You do not have permission to create a team.';
+        }
+
         $divisionId = $data['division_id'] ?? null;
         if ($divisionId) {
             $teamsCountInDivision = $this->countTeamsInDivision($divisionId);
@@ -30,11 +35,17 @@ class TeamService
             }
         }
 
-        return $this->teamRepository->create($data);
+        $this->teamRepository->create($data);
+        return 'Team created successfully';
     }
 
-    public function update(int $id, array $data): Team|string|null
+
+    public function update(int $id, array $data): string|null
     {
+        if (!Auth::user()->hasPermissionTo('edit_team')) {
+            return 'You do not have permission to edit a team.';
+        }
+
         $team = $this->teamRepository->getById($id);
         if (! $team) {
             return null;
@@ -48,11 +59,17 @@ class TeamService
             }
         }
 
-        return $this->teamRepository->update($id, $data);
+        $this->teamRepository->update($id, $data);
+        return 'Team updated successfully.';
     }
+
 
     public function delete(int $id): bool
     {
+        if (!Auth::user()->hasPermissionTo('delete_team')) {
+            return 'You do not have permission to delete a team.';
+        }
+
         return $this->teamRepository->delete($id);
     }
 
