@@ -20,17 +20,18 @@ class DivisionService
 
     public function create(array $data): string
     {
-        if (!Auth::user()->hasPermissionTo('create_division')) {
+        if (! Auth::user()->hasPermissionTo('create_division')) {
             return 'You do not have permission to create a division.';
         }
 
         $this->divisionRepository->create($data);
+
         return 'Division created successfully.';
     }
 
     public function update(int $id, array $data): string
     {
-        if (!Auth::user()->hasPermissionTo('edit_division')) {
+        if (! Auth::user()->hasPermissionTo('edit_division')) {
             return 'You do not have permission to edit a division.';
         }
 
@@ -40,17 +41,18 @@ class DivisionService
         }
 
         $this->divisionRepository->update($id, $data);
+
         return 'Division updated successfully.';
     }
 
     public function delete(int $id): string
     {
-        if (!Auth::user()->hasPermissionTo('delete_division')) {
+        if (! Auth::user()->hasPermissionTo('delete_division')) {
             return 'You do not have permission to delete a division.';
         }
 
         $deleted = $this->divisionRepository->delete($id);
-        if (!$deleted) {
+        if (! $deleted) {
             return 'Failed to delete division.';
         }
 

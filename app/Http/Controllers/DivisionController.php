@@ -25,7 +25,7 @@ class DivisionController extends Controller
     {
         $validatedData = $request->validated();
 
-        $response= $this->divisionService->create($validatedData);
+        $response = $this->divisionService->create($validatedData);
 
         return response()->json(['response' => $response], 201);
     }

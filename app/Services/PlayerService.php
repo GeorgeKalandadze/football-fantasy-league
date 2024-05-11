@@ -9,13 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class PlayerService
 {
-
-
     public function __construct(
         protected PlayerRepositoryContract $playerRepository,
         protected TeamRepositoryContract $teamRepository
-    )
-    {
+    ) {
 
     }
 
@@ -26,7 +23,7 @@ class PlayerService
 
     public function create(array $data): string
     {
-        if (!Auth::user()->hasPermissionTo('create_player')) {
+        if (! Auth::user()->hasPermissionTo('create_player')) {
             return 'You do not have permission to create a player.';
         }
 
@@ -39,12 +36,13 @@ class PlayerService
         }
 
         $this->playerRepository->create($data);
+
         return 'Player created successfully';
     }
 
     public function update(int $id, array $data): string
     {
-        if (!Auth::user()->hasPermissionTo('edit_player')) {
+        if (! Auth::user()->hasPermissionTo('edit_player')) {
             return 'You do not have permission to edit a player.';
         }
 
@@ -59,17 +57,18 @@ class PlayerService
         }
 
         $this->playerRepository->update($id, $data);
+
         return 'Player updated successfully.';
     }
 
     public function delete(int $id): string
     {
-        if (!Auth::user()->hasPermissionTo('delete_player')) {
+        if (! Auth::user()->hasPermissionTo('delete_player')) {
             return 'You do not have permission to delete a player.';
         }
 
         $deleted = $this->playerRepository->delete($id);
-        if (!$deleted) {
+        if (! $deleted) {
             return 'Failed to delete player.';
         }
 
@@ -84,6 +83,7 @@ class PlayerService
     protected function countPlayersInTeam(int $teamId): int
     {
         $team = $this->teamRepository->getById($teamId);
+
         return $team->players()->count();
     }
 }

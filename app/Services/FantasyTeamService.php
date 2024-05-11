@@ -110,12 +110,12 @@ class FantasyTeamService
 
     public function deleteFantasyTeam(int $id): string
     {
-        if (!Auth::user()->hasPermissionTo('delete_fantasy_team')) {
+        if (! Auth::user()->hasPermissionTo('delete_fantasy_team')) {
             return 'You do not have permission to delete a fantasy team.';
         }
 
         $deleted = $this->fantasyTeamRepository->delete($id);
-        if (!$deleted) {
+        if (! $deleted) {
             return 'Failed to delete fantasy team.';
         }
 

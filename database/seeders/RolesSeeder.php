@@ -29,7 +29,7 @@ class RolesSeeder extends Seeder
                 'delete_player',
                 'create_division',
                 'edit_division',
-                'delete_division'
+                'delete_division',
             ],
             'moderator' => ['edit_team', 'edit_player', 'edit_division'],
         ];

@@ -27,7 +27,7 @@ class PlayerController extends Controller
 
         $response = $this->playerService->create($validatedData);
 
-        return response()->json(['message' => $response],201);
+        return response()->json(['message' => $response], 201);
     }
 
     public function show(Player $player): JsonResponse

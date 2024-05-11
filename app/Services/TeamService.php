@@ -23,7 +23,7 @@ class TeamService
 
     public function create(array $data): string
     {
-        if (!Auth::user()->hasPermissionTo('create_team')) {
+        if (! Auth::user()->hasPermissionTo('create_team')) {
             return 'You do not have permission to create a team.';
         }
 
@@ -36,13 +36,13 @@ class TeamService
         }
 
         $this->teamRepository->create($data);
+
         return 'Team created successfully';
     }
 
-
-    public function update(int $id, array $data): string|null
+    public function update(int $id, array $data): ?string
     {
-        if (!Auth::user()->hasPermissionTo('edit_team')) {
+        if (! Auth::user()->hasPermissionTo('edit_team')) {
             return 'You do not have permission to edit a team.';
         }
 
@@ -60,13 +60,13 @@ class TeamService
         }
 
         $this->teamRepository->update($id, $data);
+
         return 'Team updated successfully.';
     }
 
-
     public function delete(int $id): bool
     {
-        if (!Auth::user()->hasPermissionTo('delete_team')) {
+        if (! Auth::user()->hasPermissionTo('delete_team')) {
             return 'You do not have permission to delete a team.';
         }
 
