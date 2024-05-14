@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 class DivisionServiceTest extends TestCase
 {
     protected $divisionRepository;
+
     protected $divisionService;
 
     protected function setUp(): void

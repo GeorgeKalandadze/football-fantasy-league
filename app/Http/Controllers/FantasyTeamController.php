@@ -43,7 +43,7 @@ class FantasyTeamController extends Controller
         $data = $request->validated();
         $response = $this->fantasyTeamService->updateFantasyTeam($id, $data);
 
-        return response()->json(['message' => $response->original['message']],200);
+        return response()->json(['message' => $response->original['message']], 200);
     }
 
     public function destroy(int $id): JsonResponse
