@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PlayerRequest;
+use App\Http\Resources\PlayerResource;
 use App\Models\Player;
 use App\Services\PlayerService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class PlayerController extends Controller
 {
@@ -14,11 +16,11 @@ class PlayerController extends Controller
 
     }
 
-    public function index(): JsonResponse
+    public function index(): Response
     {
         $players = $this->playerService->getAllPlayers();
 
-        return response()->json(['players' => $players], 200);
+        return $this->ok(PlayerResource::collection($players));
     }
 
     public function store(PlayerRequest $request): JsonResponse
@@ -30,11 +32,11 @@ class PlayerController extends Controller
         return response()->json(['message' => $response], 201);
     }
 
-    public function show(Player $player): JsonResponse
+    public function show(Player $player): JsonResponse|Response
     {
         $player = $this->playerService->getById($player->id);
         if ($player) {
-            return response()->json(['player' => $player], 200);
+            return $this->ok(new PlayerResource($player));
         } else {
             return response()->json(['message' => 'Player not found'], 404);
         }

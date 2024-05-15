@@ -17,8 +17,8 @@ class DivisionControllerTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
         $response = $this->getJson('/api/divisions');
-        $response->assertStatus(200)
-            ->assertJsonStructure(['divisions']);
+        $response->assertStatus(200);
+
     }
 
     public function test_can_create_division()

@@ -3,12 +3,13 @@
 namespace App\Repositories;
 
 use App\Models\Division;
+use Illuminate\Database\Eloquent\Collection;
 
 class DivisionRepository implements Contracts\DivisionRepositoryContract
 {
-    public function getAll(): array
+    public function getAll(): Collection
     {
-        return Division::all()->toArray();
+        return Division::with('teams')->get();
     }
 
     public function create(array $data): Division

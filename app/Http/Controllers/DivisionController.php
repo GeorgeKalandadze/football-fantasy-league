@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DivisionRequest;
+use App\Http\Resources\DivisionResource;
 use App\Models\Division;
 use App\Services\DivisionService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class DivisionController extends Controller
 {
@@ -14,11 +16,11 @@ class DivisionController extends Controller
 
     }
 
-    public function index(): JsonResponse
+    public function index(): Response
     {
         $divisions = $this->divisionService->getAllDivisions();
 
-        return response()->json(['divisions' => $divisions], 200);
+        return $this->ok(DivisionResource::collection($divisions));
     }
 
     public function store(DivisionRequest $request): JsonResponse
@@ -30,11 +32,11 @@ class DivisionController extends Controller
         return response()->json(['response' => $response], 201);
     }
 
-    public function show(Division $division): JsonResponse
+    public function show(Division $division): JsonResponse|Response
     {
         $division = $this->divisionService->getById($division->id);
         if ($division) {
-            return response()->json(['division' => $division], 200);
+            return $this->ok(new DivisionResource($division));
         } else {
             return response()->json(['message' => 'Division not found'], 404);
         }

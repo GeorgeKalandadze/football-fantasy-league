@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Team;
 use App\Repositories\Contracts\DivisionRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class TeamService
@@ -16,7 +17,7 @@ class TeamService
 
     }
 
-    public function getAllTeams(): array
+    public function getAllTeams(): Collection
     {
         return $this->teamRepository->getAll();
     }
