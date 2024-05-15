@@ -3,10 +3,11 @@
 namespace App\Repositories\Contracts;
 
 use App\Models\FantasyTeam;
+use Illuminate\Database\Eloquent\Collection;
 
 interface FantasyTeamRepositoryContract
 {
-    public function getAll(): array;
+    public function getAll(): Collection;
 
     public function create(array $data): FantasyTeam;
 
@@ -14,7 +15,7 @@ interface FantasyTeamRepositoryContract
 
     public function delete(int $id): bool;
 
-    public function getById(int $id): ?FantasyTeam;
+    public function getById(int $id);
 
     public function attachPlayer(int $fantasyTeamId, int $playerId): void;
 

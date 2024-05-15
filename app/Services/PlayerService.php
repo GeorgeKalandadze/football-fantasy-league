@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Player;
 use App\Repositories\Contracts\PlayerRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class PlayerService
@@ -16,7 +17,7 @@ class PlayerService
 
     }
 
-    public function getAllPlayers(): array
+    public function getAllPlayers(): Collection
     {
         return $this->playerRepository->getAll();
     }

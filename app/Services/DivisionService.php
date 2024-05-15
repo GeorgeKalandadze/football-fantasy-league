@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Division;
 use App\Repositories\Contracts\DivisionRepositoryContract;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class DivisionService
@@ -13,7 +14,7 @@ class DivisionService
 
     }
 
-    public function getAllDivisions(): array
+    public function getAllDivisions(): Collection
     {
         return $this->divisionRepository->getAll();
     }

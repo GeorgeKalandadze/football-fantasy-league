@@ -4,12 +4,13 @@ namespace App\Repositories;
 
 use App\Models\FantasyTeam;
 use App\Repositories\Contracts\FantasyTeamRepositoryContract;
+use Illuminate\Database\Eloquent\Collection;
 
 class FantasyTeamRepository implements FantasyTeamRepositoryContract
 {
-    public function getAll(): array
+    public function getAll(): Collection
     {
-        return FantasyTeam::with('players')->get()->toArray();
+        return FantasyTeam::with('players')->get();
     }
 
     public function create(array $data): FantasyTeam
@@ -30,7 +31,7 @@ class FantasyTeamRepository implements FantasyTeamRepositoryContract
         return FantasyTeam::destroy($id);
     }
 
-    public function getById(int $id): ?FantasyTeam
+    public function getById(int $id)
     {
         return FantasyTeam::with('players')->find($id);
     }

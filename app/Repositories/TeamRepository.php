@@ -3,12 +3,13 @@
 namespace App\Repositories;
 
 use App\Models\Team;
+use Illuminate\Database\Eloquent\Collection;
 
 class TeamRepository implements Contracts\TeamRepositoryContract
 {
-    public function getAll(): array
+    public function getAll(): Collection
     {
-        return Team::all()->toArray();
+        return Team::with('players','division','country')->get();
     }
 
     public function create(array $data)
@@ -31,6 +32,6 @@ class TeamRepository implements Contracts\TeamRepositoryContract
 
     public function getById(int $id)
     {
-        return Team::find($id);
+        return Team::with('country', 'division', 'players')->find($id);
     }
 }

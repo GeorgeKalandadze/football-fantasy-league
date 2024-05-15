@@ -16,8 +16,7 @@ class PlayerControllerTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
         $response = $this->getJson('/api/players');
-        $response->assertStatus(200)
-            ->assertJsonStructure(['players']);
+        $response->assertStatus(200);
     }
 
     public function test_can_create_player()

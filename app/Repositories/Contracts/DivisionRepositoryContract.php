@@ -2,9 +2,11 @@
 
 namespace App\Repositories\Contracts;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface DivisionRepositoryContract
 {
-    public function getAll(): array;
+    public function getAll(): Collection;
 
     public function create(array $data);
 

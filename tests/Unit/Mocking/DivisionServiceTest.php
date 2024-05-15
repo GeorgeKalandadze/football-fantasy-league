@@ -5,6 +5,7 @@ namespace Mocking;
 use App\Models\Division;
 use App\Repositories\Contracts\DivisionRepositoryContract;
 use App\Services\DivisionService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\TestCase;
 
@@ -25,7 +26,8 @@ class DivisionServiceTest extends TestCase
 
     public function testGetAllDivisions()
     {
-        $divisions = [new Division(), new Division()];
+        $divisions = new Collection([new Division(), new Division()]);
+
         $this->divisionRepository->expects($this->once())
             ->method('getAll')
             ->willReturn($divisions);

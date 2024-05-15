@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TeamRequest;
+use App\Http\Resources\TeamResource;
 use App\Models\Team;
 use App\Services\TeamService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class TeamController extends Controller
 {
@@ -14,11 +16,11 @@ class TeamController extends Controller
 
     }
 
-    public function index(): JsonResponse
+    public function index(): Response
     {
         $teams = $this->teamService->getAllTeams();
 
-        return response()->json(['teams' => $teams], 200);
+        return $this->ok(TeamResource::collection($teams));
     }
 
     public function store(TeamRequest $request): JsonResponse
@@ -30,11 +32,11 @@ class TeamController extends Controller
         return response()->json(['message' => $message], 201);
     }
 
-    public function show(Team $team): JsonResponse
+    public function show(Team $team): JsonResponse|Response
     {
         $team = $this->teamService->getById($team->id);
         if ($team) {
-            return response()->json(['team' => $team], 200);
+            return $this->ok(new TeamResource($team));
         } else {
             return response()->json(['message' => 'Team not found'], 404);
         }

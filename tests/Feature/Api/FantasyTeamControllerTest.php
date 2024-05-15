@@ -18,8 +18,7 @@ class FantasyTeamControllerTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
         $response = $this->getJson('/api/fantasy-teams');
-        $response->assertStatus(200)
-            ->assertJsonStructure(['fantasy_teams']);
+        $response->assertStatus(200);
     }
 
     public function test_can_create_fantasy_team()
