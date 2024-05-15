@@ -1,17 +1,20 @@
 <?php
+
 namespace Mocking;
+
 use App\Models\Team;
 use App\Repositories\Contracts\DivisionRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
 use App\Services\TeamService;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class TeamServiceTest extends TestCase
 {
     protected $teamRepository;
+
     protected $divisionRepository;
+
     protected $teamService;
 
     protected function setUp(): void
@@ -111,4 +114,3 @@ class TeamServiceTest extends TestCase
         $this->assertEquals($team, $result);
     }
 }
-

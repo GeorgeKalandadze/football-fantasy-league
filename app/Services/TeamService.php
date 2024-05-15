@@ -78,7 +78,7 @@ class TeamService
         return $this->teamRepository->getById($id);
     }
 
-    protected function countTeamsInDivision(int $divisionId): int
+    private function countTeamsInDivision(int $divisionId): int
     {
         $division = $this->divisionRepository->getById($divisionId);
 

@@ -83,6 +83,9 @@ class PlayerService
     protected function countPlayersInTeam(int $teamId): int
     {
         $team = $this->teamRepository->getById($teamId);
+        if (! $team) {
+            return 0;
+        }
 
         return $team->players()->count();
     }

@@ -45,6 +45,44 @@ class PlayerServiceTest extends TestCase
         }
     }
 
+    public function testCreatePlayer()
+    {
+        Auth::shouldReceive('user->hasPermissionTo')
+            ->with('create_player')
+            ->andReturn(true);
+
+        $playerData = ['name' => 'New Player', 'team_id' => 1];
+        $this->playerRepository->expects($this->once())
+            ->method('create')
+            ->with($playerData);
+
+        $result = $this->playerService->create($playerData);
+
+        $this->assertEquals('Player created successfully', $result);
+    }
+
+    public function testUpdatePlayer()
+    {
+        Auth::shouldReceive('user->hasPermissionTo')
+            ->with('edit_player')
+            ->andReturn(true);
+
+        $playerId = 1;
+        $playerData = ['name' => 'Updated Player', 'team_id' => 1];
+        $this->playerRepository->expects($this->once())
+            ->method('getById')
+            ->with($playerId)
+            ->willReturn(new Player());
+
+        $this->playerRepository->expects($this->once())
+            ->method('update')
+            ->with($playerId, $playerData);
+
+        $result = $this->playerService->update($playerId, $playerData);
+
+        $this->assertEquals('Player updated successfully.', $result);
+    }
+
     public function testDeletePlayer()
     {
         Auth::shouldReceive('user->hasPermissionTo')
