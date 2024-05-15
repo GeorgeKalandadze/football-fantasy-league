@@ -6,6 +6,7 @@ use App\Models\Team;
 use App\Repositories\Contracts\DivisionRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
 use App\Services\TeamService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
@@ -28,11 +29,11 @@ class TeamServiceTest extends TestCase
 
     public function testGetAllTeams()
     {
-        $teams = [
+        $teams = new collection([
             new Team(['name' => 'Team 1']),
             new Team(['name' => 'Team 2']),
             new Team(['name' => 'Team 3']),
-        ];
+        ]);
         $this->teamRepository->expects($this->once())
             ->method('getAll')
             ->willReturn($teams);

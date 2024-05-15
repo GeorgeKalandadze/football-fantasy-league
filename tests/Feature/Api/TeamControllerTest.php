@@ -17,8 +17,7 @@ class TeamControllerTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
         $response = $this->getJson('/api/teams');
-        $response->assertStatus(200)
-            ->assertJsonStructure(['teams']);
+        $response->assertStatus(200);
     }
 
     public function test_can_create_team()

@@ -6,6 +6,7 @@ use App\Models\Player;
 use App\Repositories\Contracts\PlayerRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
 use App\Services\PlayerService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\TestCase;
 
@@ -28,11 +29,11 @@ class PlayerServiceTest extends TestCase
 
     public function testGetAllPlayers()
     {
-        $players = [
+        $players = new Collection([
             new Player(['name' => 'Player 1']),
             new Player(['name' => 'Player 2']),
             new Player(['name' => 'Player 3']),
-        ];
+        ]);
         $this->playerRepository->expects($this->once())
             ->method('getAll')
             ->willReturn($players);
