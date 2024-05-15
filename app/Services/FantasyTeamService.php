@@ -5,9 +5,11 @@ namespace App\Services;
 use App\Models\FantasyTeam;
 use App\Repositories\Contracts\FantasyTeamRepositoryContract;
 use App\Repositories\Contracts\PlayerRepositoryContract;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class FantasyTeamService
 {
@@ -18,7 +20,7 @@ class FantasyTeamService
 
     }
 
-    public function getAllFantasyTeams(): array
+    public function getAllFantasyTeams(): Collection
     {
         return $this->fantasyTeamRepository->getAll();
     }

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FantasyTeamRequest;
+use App\Http\Resources\FantasyTeamResource;
 use App\Services\FantasyTeamService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class FantasyTeamController extends Controller
 {
@@ -13,21 +15,21 @@ class FantasyTeamController extends Controller
 
     }
 
-    public function index(): JsonResponse
+    public function index(): Response
     {
         $fantasyTeams = $this->fantasyTeamService->getAllFantasyTeams();
 
-        return response()->json(['fantasy_teams' => $fantasyTeams], 200);
+        return $this->ok(FantasyTeamResource::collection($fantasyTeams));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(int $id): JsonResponse|Response
     {
         $fantasyTeam = $this->fantasyTeamService->getFantasyTeamById($id);
         if (! $fantasyTeam) {
             return response()->json(['message' => 'Fantasy team not found.'], 404);
         }
 
-        return response()->json(['fantasy_team' => $fantasyTeam], 200);
+        return $this->ok(new FantasyTeamResource($fantasyTeam));
     }
 
     public function store(FantasyTeamRequest $request): JsonResponse
