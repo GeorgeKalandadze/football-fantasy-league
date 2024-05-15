@@ -35,7 +35,7 @@ class FantasyTeamController extends Controller
         $data = $request->validated();
         $response = $this->fantasyTeamService->createFantasyTeam($data);
 
-        return response()->json(['message' => $response->original['message']], $response->getStatusCode());
+        return response()->json(['message' => $response->original['message']], 201);
     }
 
     public function update(FantasyTeamRequest $request, int $id): JsonResponse
@@ -43,13 +43,13 @@ class FantasyTeamController extends Controller
         $data = $request->validated();
         $response = $this->fantasyTeamService->updateFantasyTeam($id, $data);
 
-        return response()->json(['message' => $response->original['message']]);
+        return response()->json(['message' => $response->original['message']], 200);
     }
 
     public function destroy(int $id): JsonResponse
     {
         $response = $this->fantasyTeamService->deleteFantasyTeam($id);
 
-        return response()->json(['response' => $response], 201);
+        return response()->json(['response' => $response], 204);
     }
 }
