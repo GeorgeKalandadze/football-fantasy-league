@@ -9,7 +9,7 @@ class TeamRepository implements Contracts\TeamRepositoryContract
 {
     public function getAll(): Collection
     {
-        return Team::with('players','division','country')->get();
+        return Team::with('players', 'division', 'country')->get();
     }
 
     public function create(array $data): Team

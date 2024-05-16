@@ -81,6 +81,6 @@ class PlayerControllerTest extends TestCase
 
         $player = Player::factory()->create();
         $response = $this->deleteJson("/api/players/{$player->id}");
-        $response->assertStatus(200);
+        $response->assertStatus(204);
     }
 }

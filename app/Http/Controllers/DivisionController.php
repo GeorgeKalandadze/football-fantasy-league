@@ -23,37 +23,38 @@ class DivisionController extends Controller
         return $this->ok(DivisionResource::collection($divisions));
     }
 
-    public function store(DivisionRequest $request): Response
+    public function store(DivisionRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
         $response = $this->divisionService->create($validatedData);
 
-        return $this->created($response);
+        return response()->json(['response' => $response], 201);
     }
 
-    public function show(Division $division): Response
+    public function show(Division $division): JsonResponse|Response
     {
         $division = $this->divisionService->getById($division->id);
         if ($division) {
             return $this->ok(new DivisionResource($division));
         } else {
-            return $this->notFound('Division not found');
+            return response()->json(['message' => 'Division not found'], 404);
         }
     }
 
-    public function update(DivisionRequest $request, Division $division): Response
+    public function update(DivisionRequest $request, Division $division): JsonResponse
     {
         $validatedData = $request->validated();
 
         $response = $this->divisionService->update($division->id, $validatedData);
 
-        return $this->ok($response);
+        return response()->json(['response' => $response], 200);
     }
 
-    public function destroy(Division $division): Response
+    public function destroy(Division $division): JsonResponse
     {
-        $this->divisionService->delete($division->id);
-        return $this->noContent();
+        $response = $this->divisionService->delete($division->id);
+
+        return response()->json(['response' => $response], 204);
     }
 }
