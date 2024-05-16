@@ -23,13 +23,13 @@ class TeamController extends Controller
         return $this->ok(TeamResource::collection($teams));
     }
 
-    public function store(TeamRequest $request): JsonResponse
+    public function store(TeamRequest $request): Response
     {
         $validatedData = $request->validated();
 
-        $message = $this->teamService->create($validatedData);
+        $response = $this->teamService->create($validatedData);
 
-        return response()->json(['message' => $message], 201);
+        return $this->created($response);
     }
 
     public function show(Team $team): JsonResponse|Response

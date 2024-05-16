@@ -23,38 +23,37 @@ class PlayerController extends Controller
         return $this->ok(PlayerResource::collection($players));
     }
 
-    public function store(PlayerRequest $request): JsonResponse
+    public function store(PlayerRequest $request): Response
     {
         $validatedData = $request->validated();
 
         $response = $this->playerService->create($validatedData);
 
-        return response()->json(['message' => $response], 201);
+        return $this->created($response);
     }
 
-    public function show(Player $player): JsonResponse|Response
+    public function show(Player $player): Response
     {
         $player = $this->playerService->getById($player->id);
         if ($player) {
             return $this->ok(new PlayerResource($player));
         } else {
-            return response()->json(['message' => 'Player not found'], 404);
+            return $this->notFound('Division not found');
         }
     }
 
-    public function update(PlayerRequest $request, Player $player): JsonResponse
+    public function update(PlayerRequest $request, Player $player): Response
     {
         $validatedData = $request->validated();
 
         $response = $this->playerService->update($player->id, $validatedData);
 
-        return response()->json(['response' => $response], 200);
+        return $this->ok($response);
     }
 
-    public function destroy(Player $player): JsonResponse
+    public function destroy(Player $player): Response
     {
-        $response = $this->playerService->delete($player->id);
-
-        return response()->json(['message' => $response], 200);
+        $this->playerService->delete($player->id);
+        return $this->noContent();
     }
 }
