@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 
 class PlayerController extends Controller
 {
-    public function __construct(protected PlayerService $playerService)
+    public function __construct(private readonly PlayerService $playerService)
     {
 
     }
@@ -55,6 +55,6 @@ class PlayerController extends Controller
     {
         $response = $this->playerService->delete($player->id);
 
-        return response()->json(['message' => $response], 200);
+        return response()->json(['message' => $response], 204);
     }
 }

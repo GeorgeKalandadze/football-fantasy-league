@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 
 class FantasyTeamController extends Controller
 {
-    public function __construct(protected FantasyTeamService $fantasyTeamService)
+    public function __construct(private readonly FantasyTeamService $fantasyTeamService)
     {
 
     }

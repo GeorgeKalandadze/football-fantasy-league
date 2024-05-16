@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DivisionService
 {
-    public function __construct(protected DivisionRepositoryContract $divisionRepository)
+    public function __construct(private readonly DivisionRepositoryContract $divisionRepository)
     {
 
     }

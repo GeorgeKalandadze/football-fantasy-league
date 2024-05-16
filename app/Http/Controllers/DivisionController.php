@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 
 class DivisionController extends Controller
 {
-    public function __construct(protected DivisionService $divisionService)
+    public function __construct(private readonly DivisionService $divisionService)
     {
 
     }
@@ -55,6 +55,6 @@ class DivisionController extends Controller
     {
         $response = $this->divisionService->delete($division->id);
 
-        return response()->json(['response' => $response], 200);
+        return response()->json(['response' => $response], 204);
     }
 }

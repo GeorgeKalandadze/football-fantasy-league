@@ -9,23 +9,23 @@ class TeamRepository implements Contracts\TeamRepositoryContract
 {
     public function getAll(): Collection
     {
-        return Team::with('players','division','country')->get();
+        return Team::with('players', 'division', 'country')->get();
     }
 
-    public function create(array $data)
+    public function create(array $data): Team
     {
         return Team::create($data);
     }
 
-    public function update(int $id, array $data)
+    public function update(int $id, array $data): Team
     {
-        $player = Team::findOrFail($id);
-        $player->update($data);
+        $team = Team::findOrFail($id);
+        $team->update($data);
 
-        return $player;
+        return $team;
     }
 
-    public function delete(int $id)
+    public function delete(int $id): bool
     {
         return Team::destroy($id);
     }

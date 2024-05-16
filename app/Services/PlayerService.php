@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Auth;
 class PlayerService
 {
     public function __construct(
-        protected PlayerRepositoryContract $playerRepository,
-        protected TeamRepositoryContract $teamRepository
+        private readonly PlayerRepositoryContract $playerRepository,
+        private readonly TeamRepositoryContract $teamRepository
     ) {
 
     }

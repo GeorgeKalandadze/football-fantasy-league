@@ -69,7 +69,7 @@ class DivisionControllerTest extends TestCase
 
         $division = Division::factory()->create();
         $response = $this->deleteJson("/api/divisions/{$division->id}");
-        $response->assertStatus(200);
+        $response->assertStatus(204);
 
     }
 }
