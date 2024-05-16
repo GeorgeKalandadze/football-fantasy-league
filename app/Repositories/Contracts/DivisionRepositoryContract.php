@@ -2,17 +2,18 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Models\Division;
 use Illuminate\Database\Eloquent\Collection;
 
 interface DivisionRepositoryContract
 {
     public function getAll(): Collection;
 
-    public function create(array $data);
+    public function create(array $data): Division;
 
-    public function update(int $id, array $data);
+    public function update(int $id, array $data): Division;
 
-    public function delete(int $id);
+    public function delete(int $id): bool;
 
-    public function getById(int $id);
+    public function getById(int $id): ?Division;
 }
