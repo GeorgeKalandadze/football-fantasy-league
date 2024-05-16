@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 
 class TeamController extends Controller
 {
-    public function __construct(protected TeamService $teamService)
+    public function __construct(private readonly TeamService $teamService)
     {
 
     }

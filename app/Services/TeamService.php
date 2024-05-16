@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Auth;
 class TeamService
 {
     public function __construct(
-        protected TeamRepositoryContract $teamRepository,
-        protected DivisionRepositoryContract $divisionRepository
+        private readonly TeamRepositoryContract $teamRepository,
+        private readonly DivisionRepositoryContract $divisionRepository
     ) {
 
     }

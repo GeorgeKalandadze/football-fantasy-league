@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 
 class PlayerController extends Controller
 {
-    public function __construct(protected PlayerService $playerService)
+    public function __construct(private readonly PlayerService $playerService)
     {
 
     }

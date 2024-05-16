@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 
 class DivisionController extends Controller
 {
-    public function __construct(protected DivisionService $divisionService)
+    public function __construct(private readonly DivisionService $divisionService)
     {
 
     }
