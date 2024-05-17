@@ -1,66 +1,75 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div style="display:flex; align-items: center">
+  <h1 style="position:relative; top: -6px" >Fantasy League Project</h1>
+</div>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+🔥 This project is a fantasy league application where users can create their own fantasy teams, participate in leagues, and compete with others. The project is built using Laravel, adhering to ****SOLID**** principles with a focus on a ****service + repository**** pattern. The application includes roles and permissions management, automated fixtures and games, unit and feature testing, and more.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+#
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Authentication**: Managed with Laravel Breeze.
+- **Fantasy Team Management**: Users can create and manage their own fantasy teams.
+- **Roles and Permissions**: Admin and Moderator roles with specific permissions using Spatie Permissions.
+  - **Admin**: Can create, update, and delete teams, players, and divisions, also delete fantasy team.
+  - **Moderator**: Can edit teams, players, and divisions.
+- **Automated Fixtures and Games**: Randomized fixtures and games for league play.
 
-## Learning Laravel
+- **Testing**: Unit mock testing and feature testing.
+- **Code Formatting**: Using Laravel Pint for code formatting.
+  
+#
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Used Packages And Docs
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- [Spatie Permissions](https://spatie.be/docs/laravel-permission): A powerful package for managing roles and permissions in Laravel applications.
+- [Laravel Breeze](https://laravel.com/docs/breeze): A minimalistic authentication scaffolding for Laravel applications.
+- [Laravel Pint](https://github.com/themsaid/laravel-pint): A package for formatting PHP, HTML, CSS, and JavaScript code in Laravel applications.
+- [Service + Repository Pattern](https://joe-wadsworth.medium.com/laravel-repository-service-pattern-acf50f95726):  Learn about organizing your Laravel application using the service + repository pattern.
+- [Testing in Laravel](https://laravel.com/docs/11.x/testing):  Explore the comprehensive testing capabilities in Laravel Such as Mock unit and Feature testing.
+#
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Project setup
+```bash
+git clone https://github.com/GeorgeKalandadze/football-fantasy-league.git
+```
+```bash
+cp .env.example .env
+```
+```bash
+composer install
+```
+```bash
+php artisan key:generate
+```
+```bash
+php artisan migrate:fresh --seed
+```
+```bash
+php artisan serve
+```
+#
 
-## Laravel Sponsors
+### Running tests
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```bash
+php artisan test
+```
+#
 
-### Premium Partners
+### Custom Artisan Console Commands
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### Assign Role Command
+```bash
+php artisan user:assign-role {email} {role}
+```
+#### Remove Role Command
+```bash
+php artisan user:remove-role {email} {role}
+```
+#### Code formatting command, this is command calls Laravel pint
+```bash
+php artisan code:format
+```
