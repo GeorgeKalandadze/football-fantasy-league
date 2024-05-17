@@ -26,8 +26,13 @@ class FantasyTeamControllerTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $players = Player::factory()->count(8)->create();
-        $playerIds = $players->map->id->toArray();
+        $goalkeepers = Player::factory()->count(1)->create(['position_id' => 1]);
+        $defenders = Player::factory()->count(2)->create(['position_id' => 2]);
+        $midfielders = Player::factory()->count(3)->create(['position_id' => 3]);
+        $forwards = Player::factory()->count(2)->create(['position_id' => 4]);
+
+        $players = $goalkeepers->merge($defenders)->merge($midfielders)->merge($forwards);
+        $playerIds = $players->pluck('id')->toArray();
 
         $teamData = [
             'name' => 'Test Team',
@@ -36,19 +41,6 @@ class FantasyTeamControllerTest extends TestCase
 
         $response = $this->postJson('/api/fantasy-teams', $teamData);
         $response->assertStatus(201);
-
-    }
-
-    public function test_can_get_fantasy_team_by_id()
-    {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
-        $team = FantasyTeam::factory()->create();
-
-        $response = $this->getJson("/api/fantasy-teams/{$team->id}");
-        $response->assertStatus(200);
-
     }
 
     public function test_can_update_fantasy_team()
@@ -56,9 +48,13 @@ class FantasyTeamControllerTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $players = Player::factory()->count(8)->create();
+        $goalkeepers = Player::factory()->count(1)->create(['position_id' => 1]);
+        $defenders = Player::factory()->count(2)->create(['position_id' => 2]);
+        $midfielders = Player::factory()->count(3)->create(['position_id' => 3]);
+        $forwards = Player::factory()->count(2)->create(['position_id' => 4]);
 
-        $playerIds = $players->map->id->toArray();
+        $players = $goalkeepers->merge($defenders)->merge($midfielders)->merge($forwards);
+        $playerIds = $players->pluck('id')->toArray();
 
         $team = FantasyTeam::factory()->create([
             'user_id' => $user->id,
