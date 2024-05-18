@@ -8,18 +8,17 @@ use App\Models\Division;
 use App\Services\DivisionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Exception;
 
 class DivisionController extends Controller
 {
     public function __construct(private readonly DivisionService $divisionService)
     {
-
     }
 
     public function index(): Response
     {
         $divisions = $this->divisionService->getAllDivisions();
-
         return $this->ok(DivisionResource::collection($divisions));
     }
 
@@ -27,18 +26,21 @@ class DivisionController extends Controller
     {
         $validatedData = $request->validated();
 
-        $response = $this->divisionService->create($validatedData);
-
-        return response()->json(['response' => $response], 201);
+        try {
+            $this->divisionService->create($validatedData);
+            return response()->json(['message' => 'Division created successfully.'], 201);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function show(Division $division): JsonResponse|Response
     {
-        $division = $this->divisionService->getById($division->id);
-        if ($division) {
+        try {
+            $division = $this->divisionService->getById($division->id);
             return $this->ok(new DivisionResource($division));
-        } else {
-            return response()->json(['message' => 'Division not found'], 404);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
 
@@ -46,15 +48,21 @@ class DivisionController extends Controller
     {
         $validatedData = $request->validated();
 
-        $response = $this->divisionService->update($division->id, $validatedData);
-
-        return response()->json(['response' => $response], 200);
+        try {
+            $this->divisionService->update($division->id, $validatedData);
+            return response()->json(['message' => 'Division updated successfully.'], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function destroy(Division $division): JsonResponse
     {
-        $response = $this->divisionService->delete($division->id);
-
-        return response()->json(['response' => $response], 204);
+        try {
+            $this->divisionService->delete($division->id);
+            return response()->json(['message' => 'Division deleted successfully.'], 204);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 }

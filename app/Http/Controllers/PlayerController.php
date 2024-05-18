@@ -8,18 +8,16 @@ use App\Models\Player;
 use App\Services\PlayerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Exception;
 
 class PlayerController extends Controller
 {
     public function __construct(private readonly PlayerService $playerService)
-    {
-
-    }
+    {}
 
     public function index(): Response
     {
         $players = $this->playerService->getAllPlayers();
-
         return $this->ok(PlayerResource::collection($players));
     }
 
@@ -27,18 +25,21 @@ class PlayerController extends Controller
     {
         $validatedData = $request->validated();
 
-        $response = $this->playerService->create($validatedData);
-
-        return response()->json(['message' => $response], 201);
+        try {
+            $this->playerService->create($validatedData);
+            return response()->json(['message' => 'Player created successfully.'], 201);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function show(Player $player): JsonResponse|Response
     {
-        $player = $this->playerService->getById($player->id);
-        if ($player) {
+        try {
+            $player = $this->playerService->getById($player->id);
             return $this->ok(new PlayerResource($player));
-        } else {
-            return response()->json(['message' => 'Player not found'], 404);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
 
@@ -46,15 +47,21 @@ class PlayerController extends Controller
     {
         $validatedData = $request->validated();
 
-        $response = $this->playerService->update($player->id, $validatedData);
-
-        return response()->json(['response' => $response], 200);
+        try {
+            $this->playerService->update($player->id, $validatedData);
+            return response()->json(['message' => 'Player updated successfully.'], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function destroy(Player $player): JsonResponse
     {
-        $response = $this->playerService->delete($player->id);
-
-        return response()->json(['message' => $response], 204);
+        try {
+            $this->playerService->delete($player->id);
+            return response()->json(['message' => 'Player deleted successfully.'], 204);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 }

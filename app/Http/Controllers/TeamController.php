@@ -8,37 +8,43 @@ use App\Models\Team;
 use App\Services\TeamService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Exception;
 
 class TeamController extends Controller
 {
-    public function __construct(private readonly TeamService $teamService)
-    {
+    protected TeamService $teamService;
 
+    public function __construct(TeamService $teamService)
+    {
+        $this->teamService = $teamService;
     }
 
-    public function index(): Response
+    public function index(): JsonResponse
     {
         $teams = $this->teamService->getAllTeams();
 
-        return $this->ok(TeamResource::collection($teams));
+        return response()->json(TeamResource::collection($teams));
     }
 
     public function store(TeamRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
-        $message = $this->teamService->create($validatedData);
-
-        return response()->json(['message' => $message], 201);
+        try {
+            $this->teamService->create($validatedData);
+            return response()->json(['message' => 'Team created successfully'], 201);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 
-    public function show(Team $team): JsonResponse|Response
+    public function show(Team $team): JsonResponse
     {
-        $team = $this->teamService->getById($team->id);
-        if ($team) {
-            return $this->ok(new TeamResource($team));
-        } else {
-            return response()->json(['message' => 'Team not found'], 404);
+        try {
+            $team = $this->teamService->getById($team->id);
+            return response()->json(new TeamResource($team));
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
     }
 
@@ -46,15 +52,21 @@ class TeamController extends Controller
     {
         $validatedData = $request->validated();
 
-        $response = $this->teamService->update($team->id, $validatedData);
-
-        return response()->json(['response' => $response], 200);
+        try {
+            $this->teamService->update($team->id, $validatedData);
+            return response()->json(['message' => 'Team updated successfully'], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function destroy(Team $team): JsonResponse
     {
-        $response = $this->teamService->delete($team->id);
-
-        return response()->json(['response' => $response], 200);
+        try {
+            $this->teamService->delete($team->id);
+            return response()->json(['message' => 'Team deleted successfully'], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 }

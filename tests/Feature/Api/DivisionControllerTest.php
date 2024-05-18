@@ -24,6 +24,7 @@ class DivisionControllerTest extends TestCase
     public function test_can_create_division()
     {
         $user = User::factory()->create();
+        $user->givePermissionTo('create_division');
         Sanctum::actingAs($user);
 
         $divisionData = [
@@ -32,7 +33,6 @@ class DivisionControllerTest extends TestCase
 
         $response = $this->postJson('/api/divisions', $divisionData);
         $response->assertStatus(201);
-
     }
 
     public function test_can_get_division_by_id()
@@ -50,6 +50,7 @@ class DivisionControllerTest extends TestCase
     public function test_can_update_division()
     {
         $user = User::factory()->create();
+        $user->givePermissionTo('edit_division');
         Sanctum::actingAs($user);
 
         $division = Division::factory()->create();
@@ -59,17 +60,16 @@ class DivisionControllerTest extends TestCase
 
         $response = $this->putJson("/api/divisions/{$division->id}", $updatedData);
         $response->assertStatus(200);
-
     }
 
     public function test_can_delete_division()
     {
         $user = User::factory()->create();
+        $user->givePermissionTo('delete_division');
         Sanctum::actingAs($user);
 
         $division = Division::factory()->create();
         $response = $this->deleteJson("/api/divisions/{$division->id}");
         $response->assertStatus(204);
-
     }
 }

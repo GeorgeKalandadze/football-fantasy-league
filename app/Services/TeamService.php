@@ -7,14 +7,19 @@ use App\Repositories\Contracts\DivisionRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class TeamService
 {
-    public function __construct(
-        private readonly TeamRepositoryContract $teamRepository,
-        private readonly DivisionRepositoryContract $divisionRepository
-    ) {
+    protected TeamRepositoryContract $teamRepository;
+    protected DivisionRepositoryContract $divisionRepository;
 
+    public function __construct(
+        TeamRepositoryContract $teamRepository,
+        DivisionRepositoryContract $divisionRepository
+    ) {
+        $this->teamRepository = $teamRepository;
+        $this->divisionRepository = $divisionRepository;
     }
 
     public function getAllTeams(): Collection
@@ -22,56 +27,64 @@ class TeamService
         return $this->teamRepository->getAll();
     }
 
-    public function create(array $data): string
+    /**
+     * @throws Exception
+     */
+    public function create(array $data): void
     {
-        if (! Auth::user()->hasPermissionTo('create_team')) {
-            return 'You do not have permission to create a team.';
+        if (!Auth::user()->hasPermissionTo('create_team')) {
+            throw new Exception('You do not have permission to create a team.', 403);
         }
 
         $divisionId = $data['division_id'] ?? null;
         if ($divisionId) {
             $teamsCountInDivision = $this->countTeamsInDivision($divisionId);
             if ($teamsCountInDivision >= 10) {
-                return 'Division has reached the maximum limit of teams.';
+                throw new Exception('Division has reached the maximum limit of teams.', 400);
             }
         }
 
         $this->teamRepository->create($data);
-
-        return 'Team created successfully';
     }
 
-    public function update(int $id, array $data): ?string
+    /**
+     * @throws Exception
+     */
+    public function update(int $id, array $data): void
     {
-        if (! Auth::user()->hasPermissionTo('edit_team')) {
-            return 'You do not have permission to edit a team.';
+        if (!Auth::user()->hasPermissionTo('edit_team')) {
+            throw new Exception('You do not have permission to edit a team.', 403);
         }
 
         $team = $this->teamRepository->getById($id);
-        if (! $team) {
-            return null;
+        if (!$team) {
+            throw new Exception('Team not found.', 404);
         }
 
         $newDivisionId = $data['division_id'] ?? $team->division_id;
         if ($newDivisionId != $team->division_id) {
             $teamsCountInNewDivision = $this->countTeamsInDivision($newDivisionId);
             if ($teamsCountInNewDivision >= 10) {
-                return 'Division has reached the maximum limit of teams.';
+                throw new Exception('Division has reached the maximum limit of teams.', 400);
             }
         }
 
         $this->teamRepository->update($id, $data);
-
-        return 'Team updated successfully.';
     }
 
-    public function delete(int $id): bool
+    /**
+     * @throws Exception
+     */
+    public function delete(int $id): void
     {
-        if (! Auth::user()->hasPermissionTo('delete_team')) {
-            return 'You do not have permission to delete a team.';
+        if (!Auth::user()->hasPermissionTo('delete_team')) {
+            throw new Exception('You do not have permission to delete a team.', 403);
         }
 
-        return $this->teamRepository->delete($id);
+        $deleted = $this->teamRepository->delete($id);
+        if (!$deleted) {
+            throw new Exception('Failed to delete team.', 400);
+        }
     }
 
     public function getById(int $id): ?Team
@@ -79,10 +92,9 @@ class TeamService
         return $this->teamRepository->getById($id);
     }
 
-    private function countTeamsInDivision(int $divisionId): int
+    protected function countTeamsInDivision(int $divisionId): int
     {
         $division = $this->divisionRepository->getById($divisionId);
-
         return $division->teams()->count();
     }
 }

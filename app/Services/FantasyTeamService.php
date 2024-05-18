@@ -1,14 +1,13 @@
 <?php
-
 namespace App\Services;
 
 use App\Models\FantasyTeam;
 use App\Repositories\Contracts\FantasyTeamRepositoryContract;
 use App\Repositories\Contracts\PlayerRepositoryContract;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class FantasyTeamService
 {
@@ -16,7 +15,6 @@ class FantasyTeamService
         private readonly FantasyTeamRepositoryContract $fantasyTeamRepository,
         private readonly PlayerRepositoryContract $playerRepository
     ) {
-
     }
 
     public function getAllFantasyTeams(): Collection
@@ -29,14 +27,17 @@ class FantasyTeamService
         return $this->fantasyTeamRepository->getById($id);
     }
 
-    public function createFantasyTeam(array $data): JsonResponse
+    /**
+     * @throws Exception
+     */
+    public function createFantasyTeam(array $data): FantasyTeam
     {
         $user = auth()->user();
         if ($user->fantasyTeam()->exists()) {
-            return response()->json(['message' => 'User already has a fantasy team.'], 400);
+            throw new Exception('User already has a fantasy team.', 400);
         }
 
-        $data['user_id'] = request()->user()->id;
+        $data['user_id'] = $user->id;
         $initialBalance = 100;
         $totalCost = 0;
 
@@ -48,30 +49,35 @@ class FantasyTeamService
         }
 
         if ($totalCost > $initialBalance) {
-            return response()->json(['message' => 'Total cost of players exceeds the initial team balance.'], 400);
+            throw new Exception('Total cost of players exceeds the initial team balance.', 400);
         }
+
         $data['balance'] = $initialBalance - $totalCost;
         $fantasyTeam = $this->fantasyTeamRepository->create($data);
+
         if (isset($data['players'])) {
             foreach ($data['players'] as $playerId) {
                 $this->fantasyTeamRepository->attachPlayer($fantasyTeam->id, $playerId);
             }
         }
 
-        return response()->json(['message' => 'Fantasy team created successfully.'], 201);
+        return $fantasyTeam;
     }
 
-    public function updateFantasyTeam(int $id, array $data): JsonResponse
+    /**
+     * @throws Exception
+     */
+    public function updateFantasyTeam(int $id, array $data): FantasyTeam
     {
         $user = auth()->user();
         $fantasyTeam = $this->fantasyTeamRepository->getById($id);
 
         if (! $fantasyTeam) {
-            return response()->json(['message' => 'Fantasy team not found.'], 404);
+            throw new Exception('Fantasy team not found.', 404);
         }
 
         if ($fantasyTeam->user_id !== $user->id) {
-            return response()->json(['message' => 'You are not authorized to update this fantasy team.'], 403);
+            throw new Exception('You are not authorized to update this fantasy team.', 403);
         }
 
         $initialBalance = $fantasyTeam->balance;
@@ -81,7 +87,7 @@ class FantasyTeamService
         foreach ($newPlayers as $playerId) {
             $player = $this->playerRepository->getById($playerId);
             if (! $player) {
-                return response()->json(['message' => "The selected player $playerId is invalid."], 400);
+                throw new Exception("The selected player $playerId is invalid.", 400);
             }
             $totalCostNewPlayers += $player->market_price;
         }
@@ -91,7 +97,7 @@ class FantasyTeamService
         $updatedBalance = $initialBalance - $totalCostNewPlayers + $totalCostRemovedPlayers;
 
         if ($updatedBalance < 0) {
-            return response()->json(['message' => 'Updating the team would result in negative balance.'], 400);
+            throw new Exception('Updating the team would result in negative balance.', 400);
         }
 
         DB::beginTransaction();
@@ -101,25 +107,25 @@ class FantasyTeamService
             $fantasyTeam->update(['balance' => $updatedBalance]);
             DB::commit();
 
-            return response()->json(['message' => 'Fantasy team updated successfully.', 'fantasy_team' => $fantasyTeam]);
-        } catch (\Exception $e) {
+            return $fantasyTeam;
+        } catch (Exception $e) {
             DB::rollBack();
-
-            return response()->json(['message' => 'Failed to update fantasy team.'], 500);
+            throw new Exception('Failed to update fantasy team.', 500);
         }
     }
 
-    public function deleteFantasyTeam(int $id): string
+    /**
+     * @throws Exception
+     */
+    public function deleteFantasyTeam(int $id): void
     {
         if (! Auth::user()->hasPermissionTo('delete_fantasy_team')) {
-            return 'You do not have permission to delete a fantasy team.';
+            throw new Exception('You do not have permission to delete a fantasy team.', 403);
         }
 
         $deleted = $this->fantasyTeamRepository->delete($id);
         if (! $deleted) {
-            return 'Failed to delete fantasy team.';
+            throw new Exception('Failed to delete fantasy team.', 400);
         }
-
-        return 'Fantasy team deleted successfully.';
     }
 }

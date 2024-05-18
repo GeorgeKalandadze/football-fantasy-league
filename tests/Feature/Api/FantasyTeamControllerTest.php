@@ -26,10 +26,11 @@ class FantasyTeamControllerTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $goalkeepers = Player::factory()->count(1)->create(['position_id' => 1]);
-        $defenders = Player::factory()->count(2)->create(['position_id' => 2]);
-        $midfielders = Player::factory()->count(3)->create(['position_id' => 3]);
-        $forwards = Player::factory()->count(2)->create(['position_id' => 4]);
+        $goalkeepers = Player::factory()->count(1)->create(['position_id' => 1, 'market_price' => 6]);
+        $defenders = Player::factory()->count(2)->create(['position_id' => 2, 'market_price' => 6]);
+        $midfielders = Player::factory()->count(3)->create(['position_id' => 3, 'market_price' => 6]);
+        $forwards = Player::factory()->count(2)->create(['position_id' => 4, 'market_price' => 6]);
+
 
         $players = $goalkeepers->merge($defenders)->merge($midfielders)->merge($forwards);
         $playerIds = $players->pluck('id')->toArray();
@@ -48,10 +49,10 @@ class FantasyTeamControllerTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $goalkeepers = Player::factory()->count(1)->create(['position_id' => 1]);
-        $defenders = Player::factory()->count(2)->create(['position_id' => 2]);
-        $midfielders = Player::factory()->count(3)->create(['position_id' => 3]);
-        $forwards = Player::factory()->count(2)->create(['position_id' => 4]);
+        $goalkeepers = Player::factory()->count(1)->create(['position_id' => 1, 'market_price' => 6]);
+        $defenders = Player::factory()->count(2)->create(['position_id' => 2, 'market_price' => 6]);
+        $midfielders = Player::factory()->count(3)->create(['position_id' => 3, 'market_price' => 6]);
+        $forwards = Player::factory()->count(2)->create(['position_id' => 4, 'market_price' => 6]);
 
         $players = $goalkeepers->merge($defenders)->merge($midfielders)->merge($forwards);
         $playerIds = $players->pluck('id')->toArray();
@@ -72,6 +73,7 @@ class FantasyTeamControllerTest extends TestCase
     public function test_can_delete_fantasy_team()
     {
         $user = User::factory()->create();
+        $user->givePermissionTo('delete_fantasy_team');
         Sanctum::actingAs($user);
 
         $team = FantasyTeam::factory()->create();

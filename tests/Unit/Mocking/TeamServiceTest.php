@@ -57,9 +57,8 @@ class TeamServiceTest extends TestCase
             ->method('create')
             ->with($teamData);
 
-        $result = $this->teamService->create($teamData);
+        $this->teamService->create($teamData);
 
-        $this->assertEquals('Team created successfully', $result);
     }
 
     public function testUpdateTeam()
@@ -79,9 +78,8 @@ class TeamServiceTest extends TestCase
             ->method('update')
             ->with($teamId, $teamData);
 
-        $result = $this->teamService->update($teamId, $teamData);
+        $this->teamService->update($teamId, $teamData);
 
-        $this->assertEquals('Team updated successfully.', $result);
     }
 
     public function testDeleteTeam()
@@ -96,9 +94,8 @@ class TeamServiceTest extends TestCase
             ->with($teamId)
             ->willReturn(true);
 
-        $result = $this->teamService->delete($teamId);
+        $this->teamService->delete($teamId);
 
-        $this->assertEquals('Team deleted successfully.', $result);
     }
 
     public function testGetTeamById()
