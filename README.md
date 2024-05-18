@@ -16,7 +16,8 @@
   - **Admin**: Can create, update, and delete teams, players, and divisions, also delete fantasy team.
   - **Moderator**: Can edit teams, players, and divisions.
 - **Automated Fixtures and Games**: Randomized fixtures and games for league play.
-
+  
+- **Task Scheduling**: To randomize games results every week.
 - **Testing**: Unit mock testing and feature testing.
 - **Code Formatting**: Using Laravel Pint for code formatting.
   
