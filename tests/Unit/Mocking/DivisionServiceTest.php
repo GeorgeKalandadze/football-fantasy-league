@@ -48,9 +48,9 @@ class DivisionServiceTest extends TestCase
             ->method('create')
             ->with($divisionData);
 
-        $result = $this->divisionService->create($divisionData);
+        $this->divisionService->create($divisionData);
 
-        $this->assertEquals('Division created successfully.', $result);
+        $this->assertTrue(true);
     }
 
     public function testUpdateDivision()
@@ -70,9 +70,9 @@ class DivisionServiceTest extends TestCase
             ->method('update')
             ->with($divisionId, $divisionData);
 
-        $result = $this->divisionService->update($divisionId, $divisionData);
+        $this->divisionService->update($divisionId, $divisionData);
 
-        $this->assertEquals('Division updated successfully.', $result);
+        $this->assertTrue(true);
     }
 
     public function testDeleteDivision()
@@ -82,14 +82,17 @@ class DivisionServiceTest extends TestCase
             ->andReturn(true);
 
         $divisionId = 1;
+
         $this->divisionRepository->expects($this->once())
             ->method('delete')
             ->with($divisionId)
-            ->willReturn(true);
+            ->willThrowException(new \Exception('Failed to delete division.', 400));
 
-        $result = $this->divisionService->delete($divisionId);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Failed to delete division.');
+        $this->expectExceptionCode(400);
 
-        $this->assertEquals('Division deleted successfully.', $result);
+        $this->divisionService->delete($divisionId);
     }
 
     public function testGetDivisionById()

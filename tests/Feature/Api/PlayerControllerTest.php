@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Feature;
+
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\User;
@@ -22,6 +24,7 @@ class PlayerControllerTest extends TestCase
     public function test_can_create_player()
     {
         $user = User::factory()->create();
+        $user->givePermissionTo('create_player');
         Sanctum::actingAs($user);
 
         $team = Team::factory()->create();
@@ -36,8 +39,12 @@ class PlayerControllerTest extends TestCase
         ];
 
         $response = $this->postJson('/api/players', $playerData);
-        $response->assertStatus(201);
 
+        if ($response->getStatusCode() === 201) {
+            $this->assertDatabaseHas('players', $playerData);
+        } else {
+            $this->fail('Failed to create player: ' . $response->getContent());
+        }
     }
 
     public function test_can_get_player_by_id()
@@ -49,12 +56,12 @@ class PlayerControllerTest extends TestCase
 
         $response = $this->getJson("/api/players/{$player->id}");
         $response->assertStatus(200);
-
     }
 
     public function test_can_update_player()
     {
         $user = User::factory()->create();
+        $user->givePermissionTo('edit_player');
         Sanctum::actingAs($user);
 
         $player = Player::factory()->create();
@@ -70,13 +77,18 @@ class PlayerControllerTest extends TestCase
         ];
 
         $response = $this->putJson("/api/players/{$player->id}", $updatedData);
-        $response->assertStatus(200);
 
+        if ($response->getStatusCode() === 200) {
+            $this->assertDatabaseHas('players', $updatedData);
+        } else {
+            $this->fail('Failed to update player: ' . $response->getContent());
+        }
     }
 
     public function test_can_delete_player()
     {
         $user = User::factory()->create();
+        $user->givePermissionTo('delete_player');
         Sanctum::actingAs($user);
 
         $player = Player::factory()->create();

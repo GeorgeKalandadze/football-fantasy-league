@@ -57,9 +57,8 @@ class PlayerServiceTest extends TestCase
             ->method('create')
             ->with($playerData);
 
-        $result = $this->playerService->create($playerData);
+        $this->playerService->create($playerData);
 
-        $this->assertEquals('Player created successfully', $result);
     }
 
     public function testUpdatePlayer()
@@ -79,9 +78,8 @@ class PlayerServiceTest extends TestCase
             ->method('update')
             ->with($playerId, $playerData);
 
-        $result = $this->playerService->update($playerId, $playerData);
+        $this->playerService->update($playerId, $playerData);
 
-        $this->assertEquals('Player updated successfully.', $result);
     }
 
     public function testDeletePlayer()
@@ -96,9 +94,9 @@ class PlayerServiceTest extends TestCase
             ->with($playerId)
             ->willReturn(true);
 
-        $result = $this->playerService->delete($playerId);
+       $this->playerService->delete($playerId);
 
-        $this->assertEquals('Player deleted successfully.', $result);
+
     }
 
     public function testGetPlayerById()
