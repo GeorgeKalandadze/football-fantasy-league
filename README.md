@@ -19,6 +19,10 @@
   
 - **Task Scheduling**: To randomize games results every week.
 - **Testing**: Unit mock testing and feature testing.
+- **Events and Listeners**: Used for decoupling complex processes. For instance, the PlayerStatisticsRecorded event is fired when player statistics are updated, and corresponding listeners handle the processing.
+- **Form Request Validation**: Enhanced form request validation using prepareForValidation and withValidator. This allows for preprocessing data before validation and adding custom validation rules post-validation.
+- **API Resources**: Used for transforming and formatting API responses, providing a consistent structure for the API endpoints.
+- **Seeders and Factories**:  Provide initial data for testing and development environments, Generate realistic fake data for models.
 - **Code Formatting**: Using Laravel Pint for code formatting.
   
 #
@@ -70,7 +74,7 @@ php artisan user:assign-role {email} {role}
 ```bash
 php artisan user:remove-role {email} {role}
 ```
-#### Code formatting command, this is command calls Laravel pint
+#### Code formatting command, this command calls Laravel pint Code formatter command
 ```bash
 php artisan code:format
 ```
