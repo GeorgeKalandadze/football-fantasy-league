@@ -10,11 +10,13 @@
 
 ### Features
 
-- **Authentication**: Managed with Laravel Breeze.
-- **Fantasy Team Management**: Users can create and manage their own fantasy teams.
+- **Authentication**: User Authentications system.
+  - **API Token Authentication**: Securing API endpoints with Laravel Sanctum.
+  - **Manage Auth Functionality**: Managed with Laravel Breeze.
 - **Roles and Permissions**: Admin and Moderator roles with specific permissions using Spatie Permissions.
   - **Admin**: Can create, update, and delete teams, players, and divisions, also delete fantasy team.
   - **Moderator**: Can edit teams, players, and divisions.
+- **Fantasy Team Management**: Users can create and manage their own fantasy teams.
 - **Automated Fixtures and Games**: Randomized fixtures and games for league play.
   
 - **Task Scheduling**: To randomize games results every week.
@@ -31,6 +33,7 @@
 
 - [Spatie Permissions](https://spatie.be/docs/laravel-permission): A powerful package for managing roles and permissions in Laravel applications.
 - [Laravel Breeze](https://laravel.com/docs/breeze): A minimalistic authentication scaffolding for Laravel applications.
+- [Sanctum](https://laravel.com/docs/11.x/sanctum): Securing API endpoints with Laravel Sanctum.
 - [Laravel Pint](https://github.com/themsaid/laravel-pint): A package for formatting PHP, HTML, CSS, and JavaScript code in Laravel applications.
 - [Service + Repository Pattern](https://joe-wadsworth.medium.com/laravel-repository-service-pattern-acf50f95726):  Learn about organizing your Laravel application using the service + repository pattern.
 - [Testing in Laravel](https://laravel.com/docs/11.x/testing):  Explore the comprehensive testing capabilities in Laravel Such as Mock unit and Feature testing.
