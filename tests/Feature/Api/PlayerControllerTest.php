@@ -43,7 +43,7 @@ class PlayerControllerTest extends TestCase
         if ($response->getStatusCode() === 201) {
             $this->assertDatabaseHas('players', $playerData);
         } else {
-            $this->fail('Failed to create player: ' . $response->getContent());
+            $this->fail('Failed to create player: '.$response->getContent());
         }
     }
 
@@ -81,7 +81,7 @@ class PlayerControllerTest extends TestCase
         if ($response->getStatusCode() === 200) {
             $this->assertDatabaseHas('players', $updatedData);
         } else {
-            $this->fail('Failed to update player: ' . $response->getContent());
+            $this->fail('Failed to update player: '.$response->getContent());
         }
     }
 

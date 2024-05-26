@@ -6,9 +6,9 @@ use App\Http\Requests\DivisionRequest;
 use App\Http\Resources\DivisionResource;
 use App\Models\Division;
 use App\Services\DivisionService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Exception;
 
 class DivisionController extends Controller
 {
@@ -19,15 +19,17 @@ class DivisionController extends Controller
     public function index(): Response
     {
         $divisions = $this->divisionService->getAllDivisions();
+
         return $this->ok(DivisionResource::collection($divisions));
     }
 
     public function store(DivisionRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
-
+        $user = auth()->user();
         try {
-            $this->divisionService->create($validatedData);
+            $this->divisionService->create($validatedData, $user);
+
             return response()->json(['message' => 'Division created successfully.'], 201);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], $e->getCode());
@@ -38,6 +40,7 @@ class DivisionController extends Controller
     {
         try {
             $division = $this->divisionService->getById($division->id);
+
             return $this->ok(new DivisionResource($division));
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], $e->getCode());
@@ -47,9 +50,10 @@ class DivisionController extends Controller
     public function update(DivisionRequest $request, Division $division): JsonResponse
     {
         $validatedData = $request->validated();
-
+        $user = auth()->user();
         try {
-            $this->divisionService->update($division->id, $validatedData);
+            $this->divisionService->update($division->id, $validatedData, $user);
+
             return response()->json(['message' => 'Division updated successfully.'], 200);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], $e->getCode());
@@ -58,8 +62,10 @@ class DivisionController extends Controller
 
     public function destroy(Division $division): JsonResponse
     {
+        $user = auth()->user();
         try {
-            $this->divisionService->delete($division->id);
+            $this->divisionService->delete($division->id, $user);
+
             return response()->json(['message' => 'Division deleted successfully.'], 204);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], $e->getCode());

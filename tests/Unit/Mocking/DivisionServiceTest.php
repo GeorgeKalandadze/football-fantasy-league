@@ -48,7 +48,7 @@ class DivisionServiceTest extends TestCase
             ->method('create')
             ->with($divisionData);
 
-        $this->divisionService->create($divisionData);
+        $this->divisionService->create($divisionData, Auth::user());
 
         $this->assertTrue(true);
     }
@@ -70,7 +70,7 @@ class DivisionServiceTest extends TestCase
             ->method('update')
             ->with($divisionId, $divisionData);
 
-        $this->divisionService->update($divisionId, $divisionData);
+        $this->divisionService->update($divisionId, $divisionData, Auth::user());
 
         $this->assertTrue(true);
     }
@@ -92,7 +92,7 @@ class DivisionServiceTest extends TestCase
         $this->expectExceptionMessage('Failed to delete division.');
         $this->expectExceptionCode(400);
 
-        $this->divisionService->delete($divisionId);
+        $this->divisionService->delete($divisionId, Auth::user());
     }
 
     public function testGetDivisionById()

@@ -1,13 +1,13 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\FantasyTeam;
 use App\Repositories\Contracts\FantasyTeamRepositoryContract;
 use App\Repositories\Contracts\PlayerRepositoryContract;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class FantasyTeamService
 {
@@ -30,9 +30,8 @@ class FantasyTeamService
     /**
      * @throws Exception
      */
-    public function createFantasyTeam(array $data): FantasyTeam
+    public function createFantasyTeam(array $data, $user): FantasyTeam
     {
-        $user = auth()->user();
         if ($user->fantasyTeam()->exists()) {
             throw new Exception('User already has a fantasy team.', 400);
         }
@@ -67,7 +66,7 @@ class FantasyTeamService
     /**
      * @throws Exception
      */
-    public function updateFantasyTeam(int $id, array $data): FantasyTeam
+    public function updateFantasyTeam(int $id, array $data, $user): FantasyTeam
     {
         $user = auth()->user();
         $fantasyTeam = $this->fantasyTeamRepository->getById($id);
@@ -81,7 +80,7 @@ class FantasyTeamService
         }
 
         $initialBalance = $fantasyTeam->balance;
-        $newPlayers = isset($data['players']) ? $data['players'] : [];
+        $newPlayers = $data['players'] ?? [];
         $totalCostNewPlayers = 0;
 
         foreach ($newPlayers as $playerId) {
@@ -117,9 +116,9 @@ class FantasyTeamService
     /**
      * @throws Exception
      */
-    public function deleteFantasyTeam(int $id): void
+    public function deleteFantasyTeam(int $id, $user): void
     {
-        if (! Auth::user()->hasPermissionTo('delete_fantasy_team')) {
+        if (! $user->hasPermissionTo('delete_fantasy_team')) {
             throw new Exception('You do not have permission to delete a fantasy team.', 403);
         }
 

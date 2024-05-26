@@ -5,13 +5,13 @@ namespace App\Services;
 use App\Models\Team;
 use App\Repositories\Contracts\DivisionRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 
 class TeamService
 {
     protected TeamRepositoryContract $teamRepository;
+
     protected DivisionRepositoryContract $divisionRepository;
 
     public function __construct(
@@ -30,9 +30,9 @@ class TeamService
     /**
      * @throws Exception
      */
-    public function create(array $data): void
+    public function create(array $data, $user): void
     {
-        if (!Auth::user()->hasPermissionTo('create_team')) {
+        if (! $user->hasPermissionTo('create_team')) {
             throw new Exception('You do not have permission to create a team.', 403);
         }
 
@@ -50,14 +50,14 @@ class TeamService
     /**
      * @throws Exception
      */
-    public function update(int $id, array $data): void
+    public function update(int $id, array $data, $user): void
     {
-        if (!Auth::user()->hasPermissionTo('edit_team')) {
+        if (! $user->hasPermissionTo('edit_team')) {
             throw new Exception('You do not have permission to edit a team.', 403);
         }
 
         $team = $this->teamRepository->getById($id);
-        if (!$team) {
+        if (! $team) {
             throw new Exception('Team not found.', 404);
         }
 
@@ -75,14 +75,14 @@ class TeamService
     /**
      * @throws Exception
      */
-    public function delete(int $id): void
+    public function delete(int $id, $user): void
     {
-        if (!Auth::user()->hasPermissionTo('delete_team')) {
+        if (! $user->hasPermissionTo('delete_team')) {
             throw new Exception('You do not have permission to delete a team.', 403);
         }
 
         $deleted = $this->teamRepository->delete($id);
-        if (!$deleted) {
+        if (! $deleted) {
             throw new Exception('Failed to delete team.', 400);
         }
     }
@@ -95,6 +95,7 @@ class TeamService
     protected function countTeamsInDivision(int $divisionId): int
     {
         $division = $this->divisionRepository->getById($divisionId);
+
         return $division->teams()->count();
     }
 }

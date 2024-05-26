@@ -31,7 +31,6 @@ class FantasyTeamControllerTest extends TestCase
         $midfielders = Player::factory()->count(3)->create(['position_id' => 3, 'market_price' => 6]);
         $forwards = Player::factory()->count(2)->create(['position_id' => 4, 'market_price' => 6]);
 
-
         $players = $goalkeepers->merge($defenders)->merge($midfielders)->merge($forwards);
         $playerIds = $players->pluck('id')->toArray();
 
