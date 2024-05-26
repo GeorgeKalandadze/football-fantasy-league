@@ -1,13 +1,14 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\FantasyTeam;
 use App\Repositories\Contracts\FantasyTeamRepositoryContract;
 use App\Repositories\Contracts\PlayerRepositoryContract;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Exception;
 
 class FantasyTeamService
 {

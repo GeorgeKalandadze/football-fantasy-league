@@ -5,16 +5,17 @@ namespace App\Services;
 use App\Models\Player;
 use App\Repositories\Contracts\PlayerRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Exception;
 
 class PlayerService
 {
     public function __construct(
         private readonly PlayerRepositoryContract $playerRepository,
         private readonly TeamRepositoryContract $teamRepository
-    ) {}
+    ) {
+    }
 
     public function getAllPlayers(): Collection
     {
@@ -26,7 +27,7 @@ class PlayerService
      */
     public function create(array $data): void
     {
-        if (!Auth::user()->hasPermissionTo('create_player')) {
+        if (! Auth::user()->hasPermissionTo('create_player')) {
             throw new Exception('You do not have permission to create a player.', 403);
         }
 
@@ -46,12 +47,12 @@ class PlayerService
      */
     public function update(int $id, array $data): void
     {
-        if (!Auth::user()->hasPermissionTo('edit_player')) {
+        if (! Auth::user()->hasPermissionTo('edit_player')) {
             throw new Exception('You do not have permission to edit a player.', 403);
         }
 
         $player = $this->playerRepository->getById($id);
-        if (!$player) {
+        if (! $player) {
             throw new Exception('Player not found.', 404);
         }
 
@@ -68,12 +69,12 @@ class PlayerService
      */
     public function delete(int $id): void
     {
-        if (!Auth::user()->hasPermissionTo('delete_player')) {
+        if (! Auth::user()->hasPermissionTo('delete_player')) {
             throw new Exception('You do not have permission to delete a player.', 403);
         }
 
         $deleted = $this->playerRepository->delete($id);
-        if (!$deleted) {
+        if (! $deleted) {
             throw new Exception('Failed to delete player.', 400);
         }
     }
@@ -84,9 +85,10 @@ class PlayerService
     public function getById(int $id): ?Player
     {
         $player = $this->playerRepository->getById($id);
-        if (!$player) {
+        if (! $player) {
             throw new Exception('Player not found.', 404);
         }
+
         return $player;
     }
 

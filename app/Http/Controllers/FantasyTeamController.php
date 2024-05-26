@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FantasyTeamRequest;
 use App\Http\Resources\FantasyTeamResource;
 use App\Services\FantasyTeamService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Exception;
 
 class FantasyTeamController extends Controller
 {

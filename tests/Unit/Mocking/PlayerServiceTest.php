@@ -94,8 +94,7 @@ class PlayerServiceTest extends TestCase
             ->with($playerId)
             ->willReturn(true);
 
-       $this->playerService->delete($playerId);
-
+        $this->playerService->delete($playerId);
 
     }
 

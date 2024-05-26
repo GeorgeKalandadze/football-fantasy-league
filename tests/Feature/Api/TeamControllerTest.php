@@ -38,8 +38,7 @@ class TeamControllerTest extends TestCase
         $response->assertStatus(201);
     }
 
-
-        public function test_can_get_team_by_id()
+    public function test_can_get_team_by_id()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
