@@ -7,7 +7,6 @@ use App\Repositories\Contracts\PlayerRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
 
 class PlayerService
 {
@@ -25,9 +24,9 @@ class PlayerService
     /**
      * @throws Exception
      */
-    public function create(array $data): void
+    public function create(array $data, $user): void
     {
-        if (! Auth::user()->hasPermissionTo('create_player')) {
+        if (! $user->hasPermissionTo('create_player')) {
             throw new Exception('You do not have permission to create a player.', 403);
         }
 
@@ -45,9 +44,9 @@ class PlayerService
     /**
      * @throws Exception
      */
-    public function update(int $id, array $data): void
+    public function update(int $id, array $data, $user): void
     {
-        if (! Auth::user()->hasPermissionTo('edit_player')) {
+        if (! $user->hasPermissionTo('edit_player')) {
             throw new Exception('You do not have permission to edit a player.', 403);
         }
 
@@ -67,9 +66,9 @@ class PlayerService
     /**
      * @throws Exception
      */
-    public function delete(int $id): void
+    public function delete(int $id, $user): void
     {
-        if (! Auth::user()->hasPermissionTo('delete_player')) {
+        if (! $user->hasPermissionTo('delete_player')) {
             throw new Exception('You do not have permission to delete a player.', 403);
         }
 

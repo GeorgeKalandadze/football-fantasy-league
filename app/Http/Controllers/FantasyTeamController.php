@@ -38,9 +38,11 @@ class FantasyTeamController extends Controller
 
     public function store(FantasyTeamRequest $request): JsonResponse
     {
+        $data = $request->validated();
+        $user = auth()->user();
+
         try {
-            $data = $request->validated();
-            $fantasyTeam = $this->fantasyTeamService->createFantasyTeam($data);
+            $fantasyTeam = $this->fantasyTeamService->createFantasyTeam($data, $user);
 
             return response()->json(['message' => 'Fantasy team created successfully.', 'fantasy_team' => new FantasyTeamResource($fantasyTeam)], 201);
         } catch (Exception $e) {
@@ -50,9 +52,11 @@ class FantasyTeamController extends Controller
 
     public function update(FantasyTeamRequest $request, int $id): JsonResponse
     {
+        $data = $request->validated();
+        $user = auth()->user();
+
         try {
-            $data = $request->validated();
-            $fantasyTeam = $this->fantasyTeamService->updateFantasyTeam($id, $data);
+            $fantasyTeam = $this->fantasyTeamService->updateFantasyTeam($id, $data, $user);
 
             return response()->json(['message' => 'Fantasy team updated successfully.', 'fantasy_team' => new FantasyTeamResource($fantasyTeam)], 200);
         } catch (Exception $e) {
@@ -62,8 +66,10 @@ class FantasyTeamController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
+        $user = auth()->user();
+
         try {
-            $this->fantasyTeamService->deleteFantasyTeam($id);
+            $this->fantasyTeamService->deleteFantasyTeam($id, $user);
 
             return response()->json(['message' => 'Fantasy team deleted successfully.'], 204);
         } catch (Exception $e) {

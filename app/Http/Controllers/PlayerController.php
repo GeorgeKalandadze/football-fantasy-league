@@ -26,9 +26,9 @@ class PlayerController extends Controller
     public function store(PlayerRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
-
+        $user = auth()->user();
         try {
-            $this->playerService->create($validatedData);
+            $this->playerService->create($validatedData, $user);
 
             return response()->json(['message' => 'Player created successfully.'], 201);
         } catch (Exception $e) {
@@ -50,9 +50,9 @@ class PlayerController extends Controller
     public function update(PlayerRequest $request, Player $player): JsonResponse
     {
         $validatedData = $request->validated();
-
+        $user = auth()->user();
         try {
-            $this->playerService->update($player->id, $validatedData);
+            $this->playerService->update($player->id, $validatedData, $user);
 
             return response()->json(['message' => 'Player updated successfully.'], 200);
         } catch (Exception $e) {
@@ -62,8 +62,9 @@ class PlayerController extends Controller
 
     public function destroy(Player $player): JsonResponse
     {
+        $user = auth()->user();
         try {
-            $this->playerService->delete($player->id);
+            $this->playerService->delete($player->id, $user);
 
             return response()->json(['message' => 'Player deleted successfully.'], 204);
         } catch (Exception $e) {
