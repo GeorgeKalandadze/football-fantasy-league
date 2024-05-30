@@ -30,12 +30,8 @@ class TeamService
     /**
      * @throws Exception
      */
-    public function create(array $data, $user): void
+    public function create(array $data): void
     {
-        if (! $user->hasPermissionTo('create_team')) {
-            throw new Exception('You do not have permission to create a team.', 403);
-        }
-
         $divisionId = $data['division_id'] ?? null;
         if ($divisionId) {
             $teamsCountInDivision = $this->countTeamsInDivision($divisionId);
@@ -50,12 +46,8 @@ class TeamService
     /**
      * @throws Exception
      */
-    public function update(int $id, array $data, $user): void
+    public function update(int $id, array $data): void
     {
-        if (! $user->hasPermissionTo('edit_team')) {
-            throw new Exception('You do not have permission to edit a team.', 403);
-        }
-
         $team = $this->teamRepository->getById($id);
         if (! $team) {
             throw new Exception('Team not found.', 404);
@@ -75,12 +67,8 @@ class TeamService
     /**
      * @throws Exception
      */
-    public function delete(int $id, $user): void
+    public function delete(int $id): void
     {
-        if (! $user->hasPermissionTo('delete_team')) {
-            throw new Exception('You do not have permission to delete a team.', 403);
-        }
-
         $deleted = $this->teamRepository->delete($id);
         if (! $deleted) {
             throw new Exception('Failed to delete team.', 400);
