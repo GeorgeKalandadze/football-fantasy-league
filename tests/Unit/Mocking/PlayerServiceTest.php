@@ -57,7 +57,7 @@ class PlayerServiceTest extends TestCase
             ->method('create')
             ->with($playerData);
 
-        $this->playerService->create($playerData, Auth::user());
+        $this->playerService->create($playerData);
 
     }
 
@@ -78,7 +78,7 @@ class PlayerServiceTest extends TestCase
             ->method('update')
             ->with($playerId, $playerData);
 
-        $this->playerService->update($playerId, $playerData, Auth::user());
+        $this->playerService->update($playerId, $playerData);
 
     }
 
@@ -94,7 +94,7 @@ class PlayerServiceTest extends TestCase
             ->with($playerId)
             ->willReturn(true);
 
-        $this->playerService->delete($playerId, Auth::user());
+        $this->playerService->delete($playerId);
 
     }
 

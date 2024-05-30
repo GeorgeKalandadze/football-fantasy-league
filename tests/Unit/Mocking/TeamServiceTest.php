@@ -57,7 +57,7 @@ class TeamServiceTest extends TestCase
             ->method('create')
             ->with($teamData);
 
-        $this->teamService->create($teamData, Auth::user());
+        $this->teamService->create($teamData);
 
     }
 
@@ -78,7 +78,7 @@ class TeamServiceTest extends TestCase
             ->method('update')
             ->with($teamId, $teamData);
 
-        $this->teamService->update($teamId, $teamData, Auth::user());
+        $this->teamService->update($teamId, $teamData);
 
     }
 
@@ -94,7 +94,7 @@ class TeamServiceTest extends TestCase
             ->with($teamId)
             ->willReturn(true);
 
-        $this->teamService->delete($teamId, Auth::user());
+        $this->teamService->delete($teamId);
 
     }
 

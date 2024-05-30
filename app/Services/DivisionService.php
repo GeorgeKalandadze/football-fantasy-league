@@ -26,7 +26,6 @@ class DivisionService
     /**
      * @throws Exception
      */
-
     public function update(int $id, array $data): void
     {
         $division = $this->divisionRepository->getById($id);
@@ -40,7 +39,6 @@ class DivisionService
     /**
      * @throws Exception
      */
-
     public function delete(int $id): void
     {
         $deleted = $this->divisionRepository->delete($id);
@@ -52,7 +50,6 @@ class DivisionService
     /**
      * @throws Exception
      */
-
     public function getById(int $id): ?Division
     {
         $division = $this->divisionRepository->getById($id);
