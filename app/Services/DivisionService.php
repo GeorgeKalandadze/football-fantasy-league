@@ -18,21 +18,16 @@ class DivisionService
         return $this->divisionRepository->getAll();
     }
 
-    public function create(array $data, $user): void
+    public function create(array $data): void
     {
-        if (! $user->hasPermissionTo('create_division')) {
-            throw new Exception('You do not have permission to create a division.', 403);
-        }
-
         $this->divisionRepository->create($data);
     }
 
-    public function update(int $id, array $data, $user): void
+    /**
+     * @throws Exception
+     */
+    public function update(int $id, array $data): void
     {
-        if (! $user->hasPermissionTo('edit_division')) {
-            throw new Exception('You do not have permission to edit a division.', 403);
-        }
-
         $division = $this->divisionRepository->getById($id);
         if (! $division) {
             throw new Exception('Division not found.', 404);
@@ -41,18 +36,20 @@ class DivisionService
         $this->divisionRepository->update($id, $data);
     }
 
-    public function delete(int $id, $user): void
+    /**
+     * @throws Exception
+     */
+    public function delete(int $id): void
     {
-        if (! $user->hasPermissionTo('delete_division')) {
-            throw new Exception('You do not have permission to delete a division.', 403);
-        }
-
         $deleted = $this->divisionRepository->delete($id);
         if (! $deleted) {
             throw new Exception('Failed to delete division.', 400);
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function getById(int $id): ?Division
     {
         $division = $this->divisionRepository->getById($id);

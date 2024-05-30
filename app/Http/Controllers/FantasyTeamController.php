@@ -66,10 +66,9 @@ class FantasyTeamController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $user = auth()->user();
 
         try {
-            $this->fantasyTeamService->deleteFantasyTeam($id, $user);
+            $this->fantasyTeamService->deleteFantasyTeam($id);
 
             return response()->json(['message' => 'Fantasy team deleted successfully.'], 204);
         } catch (Exception $e) {

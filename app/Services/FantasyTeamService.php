@@ -116,12 +116,8 @@ class FantasyTeamService
     /**
      * @throws Exception
      */
-    public function deleteFantasyTeam(int $id, $user): void
+    public function deleteFantasyTeam(int $id): void
     {
-        if (! $user->hasPermissionTo('delete_fantasy_team')) {
-            throw new Exception('You do not have permission to delete a fantasy team.', 403);
-        }
-
         $deleted = $this->fantasyTeamRepository->delete($id);
         if (! $deleted) {
             throw new Exception('Failed to delete fantasy team.', 400);
