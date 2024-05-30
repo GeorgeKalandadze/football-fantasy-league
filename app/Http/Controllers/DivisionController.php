@@ -26,9 +26,9 @@ class DivisionController extends Controller
     public function store(DivisionRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
-        $user = auth()->user();
+
         try {
-            $this->divisionService->create($validatedData, $user);
+            $this->divisionService->create($validatedData);
 
             return response()->json(['message' => 'Division created successfully.'], 201);
         } catch (Exception $e) {
@@ -50,9 +50,9 @@ class DivisionController extends Controller
     public function update(DivisionRequest $request, Division $division): JsonResponse
     {
         $validatedData = $request->validated();
-        $user = auth()->user();
+
         try {
-            $this->divisionService->update($division->id, $validatedData, $user);
+            $this->divisionService->update($division->id, $validatedData);
 
             return response()->json(['message' => 'Division updated successfully.'], 200);
         } catch (Exception $e) {
@@ -62,9 +62,8 @@ class DivisionController extends Controller
 
     public function destroy(Division $division): JsonResponse
     {
-        $user = auth()->user();
         try {
-            $this->divisionService->delete($division->id, $user);
+            $this->divisionService->delete($division->id);
 
             return response()->json(['message' => 'Division deleted successfully.'], 204);
         } catch (Exception $e) {

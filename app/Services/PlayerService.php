@@ -24,12 +24,8 @@ class PlayerService
     /**
      * @throws Exception
      */
-    public function create(array $data, $user): void
+    public function create(array $data): void
     {
-        if (! $user->hasPermissionTo('create_player')) {
-            throw new Exception('You do not have permission to create a player.', 403);
-        }
-
         $teamId = $data['team_id'] ?? null;
         if ($teamId) {
             $playersCountInTeam = $this->countPlayersInTeam($teamId);
@@ -44,12 +40,8 @@ class PlayerService
     /**
      * @throws Exception
      */
-    public function update(int $id, array $data, $user): void
+    public function update(int $id, array $data): void
     {
-        if (! $user->hasPermissionTo('edit_player')) {
-            throw new Exception('You do not have permission to edit a player.', 403);
-        }
-
         $player = $this->playerRepository->getById($id);
         if (! $player) {
             throw new Exception('Player not found.', 404);
@@ -66,12 +58,8 @@ class PlayerService
     /**
      * @throws Exception
      */
-    public function delete(int $id, $user): void
+    public function delete(int $id): void
     {
-        if (! $user->hasPermissionTo('delete_player')) {
-            throw new Exception('You do not have permission to delete a player.', 403);
-        }
-
         $deleted = $this->playerRepository->delete($id);
         if (! $deleted) {
             throw new Exception('Failed to delete player.', 400);

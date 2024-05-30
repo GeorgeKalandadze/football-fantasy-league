@@ -28,9 +28,9 @@ class TeamController extends Controller
     public function store(TeamRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
-        $user = auth()->user();
+
         try {
-            $this->teamService->create($validatedData, $user);
+            $this->teamService->create($validatedData);
 
             return response()->json(['message' => 'Team created successfully'], 201);
         } catch (Exception $e) {
@@ -52,9 +52,8 @@ class TeamController extends Controller
     public function update(TeamRequest $request, Team $team): JsonResponse
     {
         $validatedData = $request->validated();
-        $user = auth()->user();
         try {
-            $this->teamService->update($team->id, $validatedData, $user);
+            $this->teamService->update($team->id, $validatedData);
 
             return response()->json(['message' => 'Team updated successfully'], 200);
         } catch (Exception $e) {
@@ -64,9 +63,8 @@ class TeamController extends Controller
 
     public function destroy(Team $team): JsonResponse
     {
-        $user = auth()->user();
         try {
-            $this->teamService->delete($team->id, $user);
+            $this->teamService->delete($team->id);
 
             return response()->json(['message' => 'Team deleted successfully'], 200);
         } catch (Exception $e) {
