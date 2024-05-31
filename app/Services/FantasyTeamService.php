@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\FantasyTeamException;
 use App\Models\FantasyTeam;
 use App\Repositories\Contracts\FantasyTeamRepositoryContract;
 use App\Repositories\Contracts\PlayerRepositoryContract;
@@ -11,10 +12,15 @@ use Illuminate\Support\Facades\DB;
 
 class FantasyTeamService
 {
+    protected FantasyTeamRepositoryContract $fantasyTeamRepository;
+    protected PlayerRepositoryContract $playerRepository;
+
     public function __construct(
-        private readonly FantasyTeamRepositoryContract $fantasyTeamRepository,
-        private readonly PlayerRepositoryContract $playerRepository
+        FantasyTeamRepositoryContract $fantasyTeamRepository,
+        PlayerRepositoryContract $playerRepository
     ) {
+        $this->fantasyTeamRepository = $fantasyTeamRepository;
+        $this->playerRepository = $playerRepository;
     }
 
     public function getAllFantasyTeams(): Collection
@@ -28,15 +34,14 @@ class FantasyTeamService
     }
 
     /**
-     * @throws Exception
+     * @throws FantasyTeamException
      */
     public function createFantasyTeam(array $data, $user): FantasyTeam
     {
         if ($user->fantasyTeam()->exists()) {
-            throw new Exception('User already has a fantasy team.', 400);
+            throw FantasyTeamException::userAlreadyHasTeam();
         }
 
-        $data['user_id'] = $user->id;
         $initialBalance = 100;
         $totalCost = 0;
 
@@ -48,10 +53,12 @@ class FantasyTeamService
         }
 
         if ($totalCost > $initialBalance) {
-            throw new Exception('Total cost of players exceeds the initial team balance.', 400);
+            throw FantasyTeamException::totalCostExceedsBalance();
         }
 
+        $data['user_id'] = $user->id;
         $data['balance'] = $initialBalance - $totalCost;
+
         $fantasyTeam = $this->fantasyTeamRepository->create($data);
 
         if (isset($data['players'])) {
@@ -64,19 +71,18 @@ class FantasyTeamService
     }
 
     /**
-     * @throws Exception
+     * @throws FantasyTeamException
      */
     public function updateFantasyTeam(int $id, array $data, $user): FantasyTeam
     {
-        $user = auth()->user();
         $fantasyTeam = $this->fantasyTeamRepository->getById($id);
 
         if (! $fantasyTeam) {
-            throw new Exception('Fantasy team not found.', 404);
+            throw FantasyTeamException::fantasyTeamNotFound();
         }
 
         if ($fantasyTeam->user_id !== $user->id) {
-            throw new Exception('You are not authorized to update this fantasy team.', 403);
+            throw FantasyTeamException::unauthorizedToUpdateTeam();
         }
 
         $initialBalance = $fantasyTeam->balance;
@@ -86,7 +92,7 @@ class FantasyTeamService
         foreach ($newPlayers as $playerId) {
             $player = $this->playerRepository->getById($playerId);
             if (! $player) {
-                throw new Exception("The selected player $playerId is invalid.", 400);
+                throw FantasyTeamException::invalidPlayerSelected($playerId);
             }
             $totalCostNewPlayers += $player->market_price;
         }
@@ -96,7 +102,7 @@ class FantasyTeamService
         $updatedBalance = $initialBalance - $totalCostNewPlayers + $totalCostRemovedPlayers;
 
         if ($updatedBalance < 0) {
-            throw new Exception('Updating the team would result in negative balance.', 400);
+            throw FantasyTeamException::negativeBalance();
         }
 
         DB::beginTransaction();
@@ -109,18 +115,18 @@ class FantasyTeamService
             return $fantasyTeam;
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception('Failed to update fantasy team.', 500);
+            throw FantasyTeamException::failedToUpdateTeam();
         }
     }
 
     /**
-     * @throws Exception
+     * @throws FantasyTeamException
      */
     public function deleteFantasyTeam(int $id): void
     {
         $deleted = $this->fantasyTeamRepository->delete($id);
         if (! $deleted) {
-            throw new Exception('Failed to delete fantasy team.', 400);
+            throw FantasyTeamException::failedToDeleteTeam();
         }
     }
 }

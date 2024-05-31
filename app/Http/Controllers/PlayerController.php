@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\TeamException;
+use App\Exceptions\PlayerException;
 use App\Http\Requests\PlayerRequest;
 use App\Http\Resources\PlayerResource;
 use App\Models\Player;
@@ -23,7 +23,7 @@ class PlayerController extends Controller
     }
 
     /**
-     * @throws TeamException
+     * @throws PlayerException
      */
     public function store(PlayerRequest $request): JsonResponse
     {
@@ -33,7 +33,7 @@ class PlayerController extends Controller
     }
 
     /**
-     * @throws TeamException
+     * @throws PlayerException
      */
     public function show(Player $player): Response
     {
@@ -42,7 +42,7 @@ class PlayerController extends Controller
     }
 
     /**
-     * @throws TeamException
+     * @throws PlayerException
      */
     public function update(PlayerRequest $request, Player $player): JsonResponse
     {
@@ -52,7 +52,7 @@ class PlayerController extends Controller
     }
 
     /**
-     * @throws TeamException
+     * @throws PlayerException
      */
     public function destroy(Player $player): JsonResponse
     {

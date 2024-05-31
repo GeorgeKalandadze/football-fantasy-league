@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\TeamException;
 use App\Models\Team;
 use App\Repositories\Contracts\DivisionRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
@@ -28,7 +29,7 @@ class TeamService
     }
 
     /**
-     * @throws Exception
+     * @throws TeamException
      */
     public function create(array $data): void
     {
@@ -36,7 +37,7 @@ class TeamService
         if ($divisionId) {
             $teamsCountInDivision = $this->countTeamsInDivision($divisionId);
             if ($teamsCountInDivision >= 10) {
-                throw new Exception('Division has reached the maximum limit of teams.', 400);
+                throw TeamException::divisionMaxTeamsReached();
             }
         }
 
@@ -44,20 +45,20 @@ class TeamService
     }
 
     /**
-     * @throws Exception
+     * @throws TeamException
      */
     public function update(int $id, array $data): void
     {
         $team = $this->teamRepository->getById($id);
         if (! $team) {
-            throw new Exception('Team not found.', 404);
+            throw TeamException::teamNotFound();
         }
 
         $newDivisionId = $data['division_id'] ?? $team->division_id;
         if ($newDivisionId != $team->division_id) {
             $teamsCountInNewDivision = $this->countTeamsInDivision($newDivisionId);
             if ($teamsCountInNewDivision >= 10) {
-                throw new Exception('Division has reached the maximum limit of teams.', 400);
+                throw TeamException::divisionMaxTeamsReached();
             }
         }
 
@@ -65,13 +66,13 @@ class TeamService
     }
 
     /**
-     * @throws Exception
+     * @throws TeamException
      */
     public function delete(int $id): void
     {
         $deleted = $this->teamRepository->delete($id);
         if (! $deleted) {
-            throw new Exception('Failed to delete team.', 400);
+            throw TeamException::failedToDeleteTeam();
         }
     }
 
@@ -87,3 +88,4 @@ class TeamService
         return $division->teams()->count();
     }
 }
+

@@ -4,7 +4,7 @@
 
 namespace App\Services;
 
-use App\Exceptions\TeamException;
+use App\Exceptions\PlayerException;
 use App\Models\Player;
 use App\Repositories\Contracts\PlayerRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
@@ -24,58 +24,58 @@ class PlayerService
     }
 
     /**
-     * @throws TeamException
+     * @throws PlayerException
      */
     public function create(array $data): void
     {
         $teamId = $data['team_id'] ?? null;
         if ($teamId && $this->countPlayersInTeam($teamId) >= 23) {
-            throw TeamException::teamFullyOccupied();
+            throw PlayerException::teamFullyOccupied();
         }
 
         $this->playerRepository->create($data);
     }
 
     /**
-     * @throws TeamException
+     * @throws PlayerException
      */
     public function update(int $id, array $data): void
     {
         $player = $this->playerRepository->getById($id);
         if (!$player) {
-            throw TeamException::playerNotFound();
+            throw PlayerException::playerNotFound();
         }
 
         $newTeamId = $data['team_id'] ?? $player->team_id;
         if ($newTeamId && $this->countPlayersInTeam($newTeamId) >= 23) {
-            throw TeamException::teamFullyOccupied();
+            throw PlayerException::teamFullyOccupied();
         }
 
         $this->playerRepository->update($id, $data);
     }
 
     /**
-     * @throws TeamException
+     * @throws PlayerException
      */
     public function delete(int $id): void
     {
         $player = $this->playerRepository->getById($id);
 
         if (!$player) {
-            throw TeamException::playerNotFound();
+            throw PlayerException::playerNotFound();
         }
 
         $this->playerRepository->delete($id);
     }
 
     /**
-     * @throws TeamException
+     * @throws PlayerException
      */
     public function getById(int $id): ?Player
     {
         $player = $this->playerRepository->getById($id);
         if (!$player) {
-            throw TeamException::playerNotFound();
+            throw PlayerException::playerNotFound();
         }
 
         return $player;

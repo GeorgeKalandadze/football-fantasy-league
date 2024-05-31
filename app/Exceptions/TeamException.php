@@ -6,30 +6,18 @@ use Exception;
 
 class TeamException extends Exception
 {
-    protected $message;
-    protected $code;
-
-    public function __construct($message = null, $code = null)
+    public static function teamNotFound(): self
     {
-        parent::__construct($message ?? 'A team-related error occurred.', $code ?? 400);
+        return new self('Team not found.', 404);
     }
 
-    public static function teamFullyOccupied(): self
+    public static function divisionMaxTeamsReached(): self
     {
-        return new self(
-            'Team is fully occupied. Please consider adding this player to another team or create the player without a team.',
-            400
-        );
+        return new self('Division has reached the maximum limit of teams.', 400);
     }
 
-    public static function playerNotFound(): self
+    public static function failedToDeleteTeam(): self
     {
-        return new self('Player not found.', 404);
-    }
-
-    public static function failedToDeletePlayer(): self
-    {
-        return new self('Failed to delete player.', 400);
+        return new self('Failed to delete team.', 400);
     }
 }
-
