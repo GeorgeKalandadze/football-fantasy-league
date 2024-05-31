@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -41,13 +43,14 @@ class Handler extends ExceptionHandler
 
     /**
      * Register the exception handling callbacks for the application.
+     *
+     * @throws Throwable
      */
-
-    public function render($request, Throwable $e)
+    public function render($request, Throwable $e): Response|JsonResponse|RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         if ($e instanceof ModelNotFoundException) {
             return new JsonResponse([
-                'message' => "Unable to locate the {$this->prettyModelNotFound($e)} you requested."
+                'message' => "Unable to locate the {$this->prettyModelNotFound($e)} you requested.",
             ], 404);
         }
 

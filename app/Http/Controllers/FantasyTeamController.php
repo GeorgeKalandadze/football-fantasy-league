@@ -21,6 +21,7 @@ class FantasyTeamController extends Controller
     public function index(): JsonResponse
     {
         $fantasyTeams = $this->fantasyTeamService->getAllFantasyTeams();
+
         return response()->json(FantasyTeamResource::collection($fantasyTeams));
     }
 
@@ -32,12 +33,14 @@ class FantasyTeamController extends Controller
         $validatedData = $request->validated();
         $user = auth()->user();
         $fantasyTeam = $this->fantasyTeamService->createFantasyTeam($validatedData, $user);
+
         return response()->json(new FantasyTeamResource($fantasyTeam), 201);
     }
 
     public function show(FantasyTeam $fantasyTeam): JsonResponse
     {
         $fantasyTeam = $this->fantasyTeamService->getFantasyTeamById($fantasyTeam->id);
+
         return response()->json(new FantasyTeamResource($fantasyTeam));
     }
 
@@ -49,6 +52,7 @@ class FantasyTeamController extends Controller
         $validatedData = $request->validated();
         $user = auth()->user();
         $updatedFantasyTeam = $this->fantasyTeamService->updateFantasyTeam($fantasyTeam->id, $validatedData, $user);
+
         return response()->json(new FantasyTeamResource($updatedFantasyTeam), 200);
     }
 
@@ -58,6 +62,7 @@ class FantasyTeamController extends Controller
     public function destroy(FantasyTeam $fantasyTeam): JsonResponse
     {
         $this->fantasyTeamService->deleteFantasyTeam($fantasyTeam->id);
+
         return response()->json(['message' => 'Fantasy team deleted successfully'], 204);
     }
 }

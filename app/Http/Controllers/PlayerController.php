@@ -19,6 +19,7 @@ class PlayerController extends Controller
     public function index(): Response
     {
         $players = $this->playerService->getAllPlayers();
+
         return $this->ok(PlayerResource::collection($players));
     }
 
@@ -29,6 +30,7 @@ class PlayerController extends Controller
     {
         $validatedData = $request->validated();
         $this->playerService->create($validatedData);
+
         return response()->json(['message' => 'Player created successfully.'], 201);
     }
 
@@ -38,6 +40,7 @@ class PlayerController extends Controller
     public function show(Player $player): Response
     {
         $player = $this->playerService->getById($player->id);
+
         return $this->ok(new PlayerResource($player));
     }
 
@@ -48,6 +51,7 @@ class PlayerController extends Controller
     {
         $validatedData = $request->validated();
         $this->playerService->update($player->id, $validatedData);
+
         return response()->json(['message' => 'Player updated successfully.'], 200);
     }
 
@@ -57,6 +61,7 @@ class PlayerController extends Controller
     public function destroy(Player $player): JsonResponse
     {
         $this->playerService->delete($player->id);
+
         return response()->json(['message' => 'Player deleted successfully.'], 204);
     }
 }

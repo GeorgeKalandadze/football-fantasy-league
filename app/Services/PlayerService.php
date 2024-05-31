@@ -42,7 +42,7 @@ class PlayerService
     public function update(int $id, array $data): void
     {
         $player = $this->playerRepository->getById($id);
-        if (!$player) {
+        if (! $player) {
             throw PlayerException::playerNotFound();
         }
 
@@ -61,7 +61,7 @@ class PlayerService
     {
         $player = $this->playerRepository->getById($id);
 
-        if (!$player) {
+        if (! $player) {
             throw PlayerException::playerNotFound();
         }
 
@@ -74,7 +74,7 @@ class PlayerService
     public function getById(int $id): ?Player
     {
         $player = $this->playerRepository->getById($id);
-        if (!$player) {
+        if (! $player) {
             throw PlayerException::playerNotFound();
         }
 
@@ -84,7 +84,7 @@ class PlayerService
     protected function countPlayersInTeam(int $teamId): int
     {
         $team = $this->teamRepository->getById($teamId);
+
         return $team ? $team->players()->count() : 0;
     }
 }
-

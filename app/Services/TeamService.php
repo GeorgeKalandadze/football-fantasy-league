@@ -6,7 +6,6 @@ use App\Exceptions\TeamException;
 use App\Models\Team;
 use App\Repositories\Contracts\DivisionRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
 
 class TeamService
@@ -88,4 +87,3 @@ class TeamService
         return $division->teams()->count();
     }
 }
-

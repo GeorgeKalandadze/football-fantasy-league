@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 class FantasyTeamService
 {
     protected FantasyTeamRepositoryContract $fantasyTeamRepository;
+
     protected PlayerRepositoryContract $playerRepository;
 
     public function __construct(

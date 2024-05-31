@@ -46,4 +46,3 @@ class FantasyTeamException extends Exception
         return new self('Failed to delete fantasy team.', 400);
     }
 }
-

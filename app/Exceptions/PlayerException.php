@@ -7,6 +7,7 @@ use Exception;
 class PlayerException extends Exception
 {
     protected $message;
+
     protected $code;
 
     public function __construct($message = null, $code = null)
@@ -32,4 +33,3 @@ class PlayerException extends Exception
         return new self('Failed to delete player.', 400);
     }
 }
-

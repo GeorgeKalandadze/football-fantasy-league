@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\TeamException;
 use App\Http\Requests\TeamRequest;
 use App\Http\Resources\TeamResource;
 use App\Models\Team;
@@ -21,6 +20,7 @@ class TeamController extends Controller
     public function index(): JsonResponse
     {
         $teams = $this->teamService->getAllTeams();
+
         return response()->json(TeamResource::collection($teams));
     }
 
@@ -36,6 +36,7 @@ class TeamController extends Controller
     public function show(Team $team): JsonResponse
     {
         $team = $this->teamService->getById($team->id);
+
         return response()->json(new TeamResource($team));
     }
 
@@ -55,4 +56,3 @@ class TeamController extends Controller
         return response()->json(['message' => 'Team deleted successfully'], 200);
     }
 }
-
