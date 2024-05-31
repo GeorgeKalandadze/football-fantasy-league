@@ -33,6 +33,6 @@ class PlayerRepository implements PlayerRepositoryContract
 
     public function getById(int $id)
     {
-        return Player::with('country', 'position')->find($id);
+        return Player::with('country', 'position')->findOrFail($id);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\PlayerException;
 use App\Http\Requests\PlayerRequest;
 use App\Http\Resources\PlayerResource;
 use App\Models\Player;
 use App\Services\PlayerService;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -23,49 +23,45 @@ class PlayerController extends Controller
         return $this->ok(PlayerResource::collection($players));
     }
 
+    /**
+     * @throws PlayerException
+     */
     public function store(PlayerRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
-        try {
-            $this->playerService->create($validatedData);
+        $this->playerService->create($validatedData);
 
-            return response()->json(['message' => 'Player created successfully.'], 201);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
-        }
+        return response()->json(['message' => 'Player created successfully.'], 201);
     }
 
-    public function show(Player $player): JsonResponse|Response
+    /**
+     * @throws PlayerException
+     */
+    public function show(Player $player): Response
     {
-        try {
-            $player = $this->playerService->getById($player->id);
+        $player = $this->playerService->getById($player->id);
 
-            return $this->ok(new PlayerResource($player));
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
-        }
+        return $this->ok(new PlayerResource($player));
     }
 
+    /**
+     * @throws PlayerException
+     */
     public function update(PlayerRequest $request, Player $player): JsonResponse
     {
         $validatedData = $request->validated();
-        try {
-            $this->playerService->update($player->id, $validatedData);
+        $this->playerService->update($player->id, $validatedData);
 
-            return response()->json(['message' => 'Player updated successfully.'], 200);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
-        }
+        return response()->json(['message' => 'Player updated successfully.'], 200);
     }
 
+    /**
+     * @throws PlayerException
+     */
     public function destroy(Player $player): JsonResponse
     {
-        try {
-            $this->playerService->delete($player->id);
+        $this->playerService->delete($player->id);
 
-            return response()->json(['message' => 'Player deleted successfully.'], 204);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
-        }
+        return response()->json(['message' => 'Player deleted successfully.'], 204);
     }
 }

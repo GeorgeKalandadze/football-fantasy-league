@@ -1,11 +1,13 @@
 <?php
 
+// app/Services/PlayerService.php
+
 namespace App\Services;
 
+use App\Exceptions\PlayerException;
 use App\Models\Player;
 use App\Repositories\Contracts\PlayerRepositoryContract;
 use App\Repositories\Contracts\TeamRepositoryContract;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
 
 class PlayerService
@@ -22,73 +24,67 @@ class PlayerService
     }
 
     /**
-     * @throws Exception
+     * @throws PlayerException
      */
     public function create(array $data): void
     {
         $teamId = $data['team_id'] ?? null;
-        if ($teamId) {
-            $playersCountInTeam = $this->countPlayersInTeam($teamId);
-            if ($playersCountInTeam >= 23) {
-                throw new Exception('Team is fully occupied. Please consider adding this player to another team or create the player without a team.', 400);
-            }
+        if ($teamId && $this->countPlayersInTeam($teamId) >= 23) {
+            throw PlayerException::teamFullyOccupied();
         }
 
         $this->playerRepository->create($data);
     }
 
     /**
-     * @throws Exception
+     * @throws PlayerException
      */
     public function update(int $id, array $data): void
     {
         $player = $this->playerRepository->getById($id);
         if (! $player) {
-            throw new Exception('Player not found.', 404);
+            throw PlayerException::playerNotFound();
         }
 
         $newTeamId = $data['team_id'] ?? $player->team_id;
         if ($newTeamId && $this->countPlayersInTeam($newTeamId) >= 23) {
-            throw new Exception('Team has reached the maximum limit of players.', 400);
+            throw PlayerException::teamFullyOccupied();
         }
 
         $this->playerRepository->update($id, $data);
     }
 
     /**
-     * @throws Exception
+     * @throws PlayerException
      */
     public function delete(int $id): void
     {
-        $deleted = $this->playerRepository->delete($id);
-        if (! $deleted) {
-            throw new Exception('Failed to delete player.', 400);
+        $player = $this->playerRepository->getById($id);
+
+        if (! $player) {
+            throw PlayerException::playerNotFound();
         }
+
+        $this->playerRepository->delete($id);
     }
 
     /**
-     * @throws Exception
+     * @throws PlayerException
      */
     public function getById(int $id): ?Player
     {
         $player = $this->playerRepository->getById($id);
         if (! $player) {
-            throw new Exception('Player not found.', 404);
+            throw PlayerException::playerNotFound();
         }
 
         return $player;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function countPlayersInTeam(int $teamId): int
     {
         $team = $this->teamRepository->getById($teamId);
-        if (! $team) {
-            return 0;
-        }
 
-        return $team->players()->count();
+        return $team ? $team->players()->count() : 0;
     }
 }

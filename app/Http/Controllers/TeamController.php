@@ -6,7 +6,6 @@ use App\Http\Requests\TeamRequest;
 use App\Http\Resources\TeamResource;
 use App\Models\Team;
 use App\Services\TeamService;
-use Exception;
 use Illuminate\Http\JsonResponse;
 
 class TeamController extends Controller
@@ -29,46 +28,31 @@ class TeamController extends Controller
     {
         $validatedData = $request->validated();
 
-        try {
-            $this->teamService->create($validatedData);
+        $this->teamService->create($validatedData);
 
-            return response()->json(['message' => 'Team created successfully'], 201);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
-        }
+        return response()->json(['message' => 'Team created successfully'], 201);
     }
 
     public function show(Team $team): JsonResponse
     {
-        try {
-            $team = $this->teamService->getById($team->id);
+        $team = $this->teamService->getById($team->id);
 
-            return response()->json(new TeamResource($team));
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
-        }
+        return response()->json(new TeamResource($team));
     }
 
     public function update(TeamRequest $request, Team $team): JsonResponse
     {
         $validatedData = $request->validated();
-        try {
-            $this->teamService->update($team->id, $validatedData);
 
-            return response()->json(['message' => 'Team updated successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
-        }
+        $this->teamService->update($team->id, $validatedData);
+
+        return response()->json(['message' => 'Team updated successfully'], 200);
     }
 
     public function destroy(Team $team): JsonResponse
     {
-        try {
-            $this->teamService->delete($team->id);
+        $this->teamService->delete($team->id);
 
-            return response()->json(['message' => 'Team deleted successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
-        }
+        return response()->json(['message' => 'Team deleted successfully'], 200);
     }
 }

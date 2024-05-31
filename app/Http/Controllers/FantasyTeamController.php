@@ -2,77 +2,67 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\FantasyTeamException;
 use App\Http\Requests\FantasyTeamRequest;
 use App\Http\Resources\FantasyTeamResource;
+use App\Models\FantasyTeam;
 use App\Services\FantasyTeamService;
-use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 class FantasyTeamController extends Controller
 {
-    public function __construct(private readonly FantasyTeamService $fantasyTeamService)
+    protected FantasyTeamService $fantasyTeamService;
+
+    public function __construct(FantasyTeamService $fantasyTeamService)
     {
+        $this->fantasyTeamService = $fantasyTeamService;
     }
 
-    public function index(): Response
+    public function index(): JsonResponse
     {
         $fantasyTeams = $this->fantasyTeamService->getAllFantasyTeams();
 
-        return $this->ok(FantasyTeamResource::collection($fantasyTeams));
+        return response()->json(FantasyTeamResource::collection($fantasyTeams));
     }
 
-    public function show(int $id): JsonResponse|Response
-    {
-        try {
-            $fantasyTeam = $this->fantasyTeamService->getFantasyTeamById($id);
-            if (! $fantasyTeam) {
-                return response()->json(['message' => 'Fantasy team not found.'], 404);
-            }
-
-            return $this->ok(new FantasyTeamResource($fantasyTeam));
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
-        }
-    }
-
+    /**
+     * @throws FantasyTeamException
+     */
     public function store(FantasyTeamRequest $request): JsonResponse
     {
-        $data = $request->validated();
+        $validatedData = $request->validated();
         $user = auth()->user();
+        $fantasyTeam = $this->fantasyTeamService->createFantasyTeam($validatedData, $user);
 
-        try {
-            $fantasyTeam = $this->fantasyTeamService->createFantasyTeam($data, $user);
-
-            return response()->json(['message' => 'Fantasy team created successfully.', 'fantasy_team' => new FantasyTeamResource($fantasyTeam)], 201);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
-        }
+        return response()->json(new FantasyTeamResource($fantasyTeam), 201);
     }
 
-    public function update(FantasyTeamRequest $request, int $id): JsonResponse
+    public function show(FantasyTeam $fantasyTeam): JsonResponse
     {
-        $data = $request->validated();
-        $user = auth()->user();
+        $fantasyTeam = $this->fantasyTeamService->getFantasyTeamById($fantasyTeam->id);
 
-        try {
-            $fantasyTeam = $this->fantasyTeamService->updateFantasyTeam($id, $data, $user);
-
-            return response()->json(['message' => 'Fantasy team updated successfully.', 'fantasy_team' => new FantasyTeamResource($fantasyTeam)], 200);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
-        }
+        return response()->json(new FantasyTeamResource($fantasyTeam));
     }
 
-    public function destroy(int $id): JsonResponse
+    /**
+     * @throws FantasyTeamException
+     */
+    public function update(FantasyTeamRequest $request, FantasyTeam $fantasyTeam): JsonResponse
     {
+        $validatedData = $request->validated();
+        $user = auth()->user();
+        $updatedFantasyTeam = $this->fantasyTeamService->updateFantasyTeam($fantasyTeam->id, $validatedData, $user);
 
-        try {
-            $this->fantasyTeamService->deleteFantasyTeam($id);
+        return response()->json(new FantasyTeamResource($updatedFantasyTeam), 200);
+    }
 
-            return response()->json(['message' => 'Fantasy team deleted successfully.'], 204);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
-        }
+    /**
+     * @throws FantasyTeamException
+     */
+    public function destroy(FantasyTeam $fantasyTeam): JsonResponse
+    {
+        $this->fantasyTeamService->deleteFantasyTeam($fantasyTeam->id);
+
+        return response()->json(['message' => 'Fantasy team deleted successfully'], 204);
     }
 }
