@@ -41,8 +41,8 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (TeamException $e, $request) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         });
     }
 }
