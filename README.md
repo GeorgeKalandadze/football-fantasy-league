@@ -4,7 +4,7 @@
 
 ---
 
-🔥 This project is a fantasy league application where users can create their own fantasy teams, participate in leagues, and compete with others. The project is built using Laravel, adhering to ****SOLID**** principles with a focus on a ****service + repository**** pattern. The application includes roles and permissions management, automated fixtures and games, unit and feature testing, and more.
+🔥 This project is a fantasy league application where users can create their own fantasy teams, participate in leagues, and compete with others. The project is built using Laravel, adhering to ****SOLID**** principles with a focus on a ****service + repository**** pattern. The application includes roles and permissions management, automated fixtures and games, Custom Exceptions, unit and feature testing, and more.
 
 #
 
@@ -23,6 +23,7 @@
 - **Testing**: Unit mock testing and feature testing.
 - **Events and Listeners**: Used for decoupling complex processes. For instance, the PlayerStatisticsRecorded event is fired when player statistics are updated, and corresponding listeners handle the processing.
 - **Form Request Validation**: Enhanced form request validation using prepareForValidation and withValidator. This allows for preprocessing data before validation and adding custom validation rules post-validation.
+- **Handling Exceptions**: Make Custom Exceptions to improve the user experience and make debugging easier .
 - **API Resources**: Used for transforming and formatting API responses, providing a consistent structure for the API endpoints.
 - **Seeders and Factories**:  Provide initial data for testing and development environments, Generate realistic fake data for models.
 - **Code Formatting**: Using Laravel Pint for code formatting.
